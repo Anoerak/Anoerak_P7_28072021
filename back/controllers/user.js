@@ -71,7 +71,7 @@ exports.login = (req, res) => {
                             message: 'Connection valide, redirection en cours.',
                             token: jwt.sign(
                                 { userId: result[0].id },
-                                'RANDOM_TOKEN',
+                                '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz',
                                 { expiresIn: '24h'}
                             ), 
                             userId: result[0].id

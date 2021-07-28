@@ -23,11 +23,11 @@ const errorHandler = error => {
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + " il vous faut des droits d'administrateurs plus important.");
+      console.error(bind + "Accès administrateur uniquement");
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' est dejà en utilisation.');
+      console.error(bind + ' déja occupé.');
       process.exit(1);
       break;
     default:
@@ -41,7 +41,7 @@ server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Le serveur est utilisé sur ' + bind);
+  console.log("Le serveur est en cours d'utilisation sur le " + bind);
 });
 
 server.listen(port);

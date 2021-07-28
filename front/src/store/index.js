@@ -5,12 +5,12 @@ import axios from 'axios'
 
 export default createStore({
     state: {
-        tokenToCheck: '',
+        tokenToCheck: 'RANDOM',
         userId: '',
         isValid: 'test',
         isLogged: false,
         firstnameUser: '', 
-        nameUser: '', 
+        lastnameUser: '', 
         usernameUser: 'default', 
         avatarUser: '',
         emailUser: '',
@@ -27,7 +27,7 @@ export default createStore({
     mutations: {
         CHECK_TOKEN(state) {
             try{
-                jwt.verify(state.tokenToCheck, 'RANDOM_TOKEN');
+                jwt.verify(state.tokenToCheck, '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz');
                 state.isValid = 'ok';
                 state.isLogged = true;
                 return true;
@@ -48,7 +48,7 @@ export default createStore({
             state.userId= '',
             state.isLogged = false,
             state.firstnameUser= '', 
-            state.nameUser= '', 
+            state.lastnameUser= '', 
             state.usernameUser= '', 
             state.emailUser= '',
             state.privilegesUser= '';
@@ -68,7 +68,7 @@ export default createStore({
                 this.state.privilegesUser = result.data[0].privileges;
             })
             .catch(error => {
-                console.log("Aucun utilisateur connecté", error);
+                console.log("Aucun utilisateur en ligne", error);
             })
         }
     }

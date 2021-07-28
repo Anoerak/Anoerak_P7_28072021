@@ -23,14 +23,14 @@ export default {
     this.$store.commit('CHECK_TOKEN');
   },
     beforeCreate() {
-    console.log('', this.$store.state.avatarUser);
-    // this.$store.state.tokenToCheck = this.$ls.get('token');
-    // this.$store.state.userId = this.$ls.get('userId');
+      console.log('', this.$store.state.avatarUser);
+    this.$store.state.tokenToCheck = this.$ls.get('token');
+    this.$store.state.userId = this.$ls.get('userId');
     this.$store.dispatch('getInfos');
     this.$store.commit('CHECK_TOKEN');
   },
   beforeMount() {
-    console.log('', this.$store.state.avatarUser);
+      console.log('', this.$store.state.avatarUser);
     this.$store.dispatch('getInfos');
   },
   created() {

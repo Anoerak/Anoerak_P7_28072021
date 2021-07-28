@@ -18,10 +18,10 @@
                         </figure>
                         <form>
                             <div class="field">
-                                <div class="control">
-                                    <input class="input is-large" id="username" type="text" placeholder="Pseudo" autofocus="" v-model="username" @blur="$v.username.$touch()">
-                                    <span class="help" v-if="v$.username.minLength">Le nom doit contenir au moins 3 caractères</span>
-                                    <span class="help">Votre pseudo contient des caractères non autorisés</span>
+                                <div class="control" :class="{invalid: v$.username.$error}">
+                                    <input class="input is-large" id="username" type="text" placeholder="Pseudo" autofocus="" v-model="username" @blur="$v.username.$touch()" />
+                                    <span class="help" v-if="v$.username.minLength.$error">Le nom doit contenir au moins 3 caractères</span>
+                                    <span class="help" v-if="!v$.username.syntaxe && username != ''">Votre pseudo contient des caractères non autorisés</span>
                                 </div>
                             </div>
 
@@ -73,11 +73,12 @@ import axios from 'axios'
 
 export default {
 
+  name: 'Home',
   data() {
     return {
       v$: useVuelidate(),
       username: '', 
-      // test: this.$ls.get('token'), 
+      test: this.$ls.get('token'), 
       password: '', 
       errorMessage:'',
       token: '',
@@ -109,8 +110,8 @@ export default {
           this.$store.state.tokenToCheck = response.data.token;
           this.$store.state.userId = response.data.userId;
           this.isAlert = false;
-          this.$store.dispatch('about');
-          this.$router.push('PostsList');
+          this.$store.dispatch('getInfos');
+          this.$router.push('Home');
         })
         .catch(error => { 
           this.errorMessage = error.response.data.message;
