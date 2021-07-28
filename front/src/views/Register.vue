@@ -94,12 +94,14 @@
 </style>
 
 <script>
+import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import axios from 'axios'
 
 export default {
   data() {
     return {
+      v$: useVuelidate(),
       username: '',
       email: '',
       firstname: '',
@@ -111,50 +113,54 @@ export default {
       isAlert: false
     }
   },
-  validations: {
-    email: {
-      required,
-      email
-    },
-    username: {
-      required,
-      minLength: minLength(2),
-      syntaxe: value => {
-        return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-      }
-    },
-    division: {
-      required,
-      minLength: minLength(2),
-      syntaxe: value => {
-        return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-      }
-    },
+  validations () {
+    return {
+      email: {
+        required,
+        email
+      },
+      username: {
+        required,
+        minLength: minLength(2),
+        syntaxe: value => {
+          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+        }
+      },
+      division: {
+        required,
+        minLength: minLength(2),
+        syntaxe: value => {
+          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+        }
+      },
 
-    lastname: {
-      required,
-      minLength: minLength(2),
-      syntaxe: value => {
-        return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+      lastname: {
+        required,
+        minLength: minLength(2),
+        syntaxe: value => {
+          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+        }
+      },
+        firstname: {
+          required,
+          minLength: minLength(2),
+          syntaxe: value => {
+            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+          }
+      },
+        password: {
+          required,
+          minLength: minLength(2),
+          syntaxe: value => {
+            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+          }
+      },
+      validation () {
+        return {
+          required,
+          sameAsPassword: sameAs('password')
+        }
       }
-    },
-      firstname: {
-        required,
-        minLength: minLength(2),
-        syntaxe: value => {
-          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-        }
-    },
-      password: {
-        required,
-        minLength: minLength(2),
-        syntaxe: value => {
-          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-        }
-    },
-    validation: {
-      required,
-      sameAsPassword: sameAs('password')
     }
   }, 
   methods: {
@@ -172,7 +178,7 @@ export default {
           this.errorMessage = response.data.message;
           this.isAlert = false;
           setTimeout(() => {
-            this.$router.push({ path: '/' })  
+            this.$router.push({ path: '/postslist' })  
           }, 2000)
         })
         .catch(error => { 

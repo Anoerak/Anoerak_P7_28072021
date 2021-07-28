@@ -8,7 +8,7 @@
                         <span>Se Déconnecter</span>
                       </button>
               </div>
-                <div class="column is-6 is-offset-3">
+                <div class="column is-6 is-offset-3" v-if="!loggedIn">
                     <h3 class="title has-text-black">Connexion</h3>
                     <div class="box">
                         <figure class="avatar">
