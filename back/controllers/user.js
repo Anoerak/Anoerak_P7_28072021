@@ -1,4 +1,4 @@
-const bdd = require('../mysqlConfig');
+const groupomaniaDb = require('../mysqlConfig');
 const bcrypt = require('bcrypt'); 
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -20,7 +20,7 @@ exports.signup = (req, res, next) => {
         bcrypt.hash(user.password, 10)
         .then(hash => {
 // Chiffrement de l'email 
-            key = "¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz";
+            key = "Setback_!&%Lunchroom_!&%Guide_!&%Twisting_!&%Gravity_!&%Lively";
             cipher = crypto.createCipher('aes192', key)
             cipher.update(req.body.email, 'binary', 'hex')
             encodedString = cipher.final('hex')
@@ -28,14 +28,14 @@ exports.signup = (req, res, next) => {
             user.email = encodedString;
             user.password = hash; 
 // Vérification existence email ou username
-            bdd.query('SELECT * from users WHERE username="'+user.username+'" OR email="'+user.email+'"', (err, result) => { 
+            groupomaniaDb.query('SELECT * from users WHERE username="'+user.username+'" OR email="'+user.email+'"', (err, result) => { 
                 if(err) throw err; 
                 if(result.length >= 1) {
                     return res.status(500).json({ message: "Pseudo et/ou Email déjà utilisé."});
                 }
 // Enregistrement du compte dans la base si nouvel utilisateur
                 else { 
-                    bdd.query('INSERT INTO users SET ?', user,  (erreur, res) => {
+                    groupomaniaDb.query('INSERT INTO users SET ?', user,  (erreur, res) => {
                         if (erreur) throw erreur; 
                         return res.status(201).json({ message: 'Compte validé. Redirection en cours.'});
                     })
@@ -57,7 +57,7 @@ exports.login = (req, res) => {
     ]
     if(checking.every(Boolean)) {
 // Si présence d'un username, recherche du password
-        bdd.query('SELECT password, id FROM users WHERE username="'+user.username+'"', (err, result) => { 
+        groupomaniaDb.query('SELECT password, id FROM users WHERE username="'+user.username+'"', (err, result) => { 
             if(err) throw err; 
             if(result.length <= 0) {
                 return res.status(500).json({ message: "Utilisateur inconnu"});
@@ -71,7 +71,7 @@ exports.login = (req, res) => {
                             message: 'Connection valide, redirection en cours.',
                             token: jwt.sign(
                                 { userId: result[0].id },
-                                'RANDOM_TOKEN',
+                                'Setback_!&%Lunchroom_!&%Guide_!&%Twisting_!&%Gravity_!&%Lively',
                                 { expiresIn: '24h'}
                             ), 
                             userId: result[0].id
@@ -89,7 +89,7 @@ exports.login = (req, res) => {
 };
 
 exports.getInfos = (req, res, next) => {
-    bdd.query('SELECT * FROM users WHERE id="'+req.params.id+'"', (err, resultat) => {
+    groupomaniaDb.query('SELECT * FROM users WHERE id="'+req.params.id+'"', (err, resultat) => {
         if(err) throw err; 
         console.log(resultat);
         return res.status(200).json(resultat);
@@ -100,14 +100,14 @@ exports.getAllPosts = (req, res, next) => {
     let IdParsed = parseInt(req.params.id, 10)
     console.log(IdParsed);
 
-    bdd.query('SELECT * FROM posts WHERE authorId="'+IdParsed+'" ORDER BY id DESC', (err, resultat) => {
+    groupomaniaDb.query('SELECT * FROM posts WHERE authorId="'+IdParsed+'" ORDER BY id DESC', (err, resultat) => {
         if(err) throw err; 
         return res.status(200).json(resultat);
     })
 };
 
 exports.getAllUsers = (req, res, next) => {
-    bdd.query('SELECT * FROM users', (err, resultat) => {
+    groupomaniaDb.query('SELECT * FROM users', (err, resultat) => {
         if(err) throw err;
         return res.status(200).json(resultat);
     })
