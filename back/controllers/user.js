@@ -7,26 +7,35 @@ exports.signup = (req, res, next) => {
     let user = req.body; 
 
 //Vérification de la bonne syntaxe des données reçues via regex + array de vérification
-    let emailChecking = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; 
+    let emailChecking = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
     let stringChecking = /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{2,}$/;
     let checking = [
         emailChecking.test(user.email),
         stringChecking.test(user.lastname),
         stringChecking.test(user.firstname),
         stringChecking.test(user.username), 
-        stringChecking.test(user.division),
     ]
+    console.log(user)
+//creation et initialisation algorythme et Mdp
+        const algorithm = 'aes-192-cbc';
+        const password = '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz';
+//récupération de la clé de l'objet Cipher
+        const key = crypto.scryptSync(password, 'salt', 24);
+//création et initialisation de l'iv
+        const iv = Buffer.alloc(16, 0);
+
     if(checking.every(Boolean)) {
         bcrypt.hash(user.password, 10)
         .then(hash => {
 // Chiffrement de l'email 
-            key = "¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz";
-            cipher = crypto.createCipher('aes192', key)
-            cipher.update(req.body.email, 'binary', 'hex')
+            cipher = crypto.createCipheriv(algorithm, key, iv)
+            cipher.update(req.body.email, 'utf-8', 'hex')
             encodedString = cipher.final('hex')
 // Enregistrement des données
             user.email = encodedString;
             user.password = hash; 
+            console.log('email is :'+user.email)
+            console.log('paswword is :'+user.password)
 // Vérification existence email ou username
             bdd.query('SELECT * from users WHERE username="'+user.username+'" OR email="'+user.email+'"', (err, result) => { 
                 if(err) throw err; 

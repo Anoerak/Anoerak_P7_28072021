@@ -5,7 +5,7 @@ import axios from 'axios'
 
 export default createStore({
     state: {
-        tokenToCheck: 'RANDOM',
+        tokenToCheck: '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz',
         userId: '',
         isValid: 'test',
         isLogged: false,

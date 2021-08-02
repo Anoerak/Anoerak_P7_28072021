@@ -7,20 +7,21 @@
                     <div class="box">
                         <figure class="avatar">
                             <img src="../../public/img/app_icons/user-regular.svg">
+                            <div :class="{'alert-danger': isAlert, 'alert-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
                         </figure>
                         <form>
                         <div class="columns row-one">
                             <div class="column is-three-fifths">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Prénom" v-model="firstname" @blur="$v.firstname.$touch()">
+                                        <input class="input is-normal" type="text" placeholder="Prénom" v-model="firstname" @blur="v$.firstname.$touch()">
                                     </div>
                                 </div>
                             </div>
                             <div class="column">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Nom" v-model="lastname" @blur="$v.lastname.$touch()">
+                                        <input class="input is-normal" type="text" placeholder="Nom" v-model="lastname" @blur="v$.lastname.$touch()">
                                     </div>
                                 </div>
                             </div>
@@ -29,7 +30,7 @@
                             <div class="column is-half">
                                 <div class="control">
                                     <div class="input">
-                                        <select v-model="division" @blur="$v.division.$touch()">
+                                        <select v-model="division" @blur="v$.division.$touch()">
                                             <option>-selection-</option>
                                             <option>Accueil</option>
                                             <option>Compta</option>
@@ -45,31 +46,36 @@
                             <div class="column is-half">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Pseudo" v-model="username" @blur="$v.username.$touch()">
+                                        <input class="input is-normal" type="text" placeholder="Pseudo" v-model="username" @blur="v$.username.$touch()">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                             <div class="field">
-                                <div class="control">
-                                    <input class="input is-normal" type="email" placeholder="Email" autofocus="" v-model="email" @blur="$v.email.$touch()">
+                                <div class="control" :class="{invalid: v$.email.$error}">
+                                    <input class="input is-normal" type="email" id="email" placeholder="Email" autofocus="" v-model="email" @blur="v$.email.$touch()">
+                                    <span v-if="!v$.email.email" id="emailHelp" class="form-text">L'adresse email fournie est invalide. Merci de respecter le format xxx@xxx.xx</span>
                                 </div>
                             </div>
 
                             <div class="field">
-                                <div class="control">
-                                    <input class="input is-normal" type="password" placeholder="Mot de Passe" v-model="password" @blur="$v.password.$touch()">
+                                <div class="control" :class="{invalid: v$.password.$error}">
+                                    <input class="input is-normal" type="password" id="password" placeholder="Mot de Passe" v-model="password" @blur="v$.password.$touch()">
+                                    <span v-if="!v$.password.minLength" id="emailHelp" class="form-text">Le mot de passe doit contenir au moins 6 caractères</span>
+                                    <span v-if="!v$.password.syntaxe && password != ''" id="nomHelp" class="form-text">Le mot de passe contient des caractères non autorisés</span>
+
                                 </div>
                             </div>
 
                             <div class="field">
-                                <div class="control">
-                                    <input class="input is-normal" type="password" placeholder="Confirmez votre Mot de Passe" v-model="validation" @blur="$v.validation.$touch()">
+                                <div class="control" :class="{invalid: v$.validation.$error}">
+                                    <input class="input is-normal" type="password" id="validation" placeholder="Confirmez votre Mot de Passe" v-model="validation" @blur="v$.validation.$touch()">
+                                    <span v-if="!v$.validation.passwordCheck && validation != ''" id="nomHelp" class="form-text">La confirmation n'est pas identique au mot de passe {{ v$.validation.syntaxe }}</span>
                                 </div>
                             </div>
 
-                            <button class="button is-block is-success is-large is-fullwidth">S'enregistrer <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            <button class="button is-block is-success is-large is-fullwidth" :disabled="v$.$invalid" @click.prevent="signUpUser">S'enregistrer <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </form>
                     </div>
                 </div>
@@ -152,13 +158,13 @@ export default {
           required,
           minLength: minLength(2),
           syntaxe: value => {
-            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{5,}$/.test(value);
           }
       },
       validation () {
         return {
           required,
-          sameAsPassword: sameAs('password')
+          passwordCheck: sameAs('password')
         }
       }
     }
@@ -178,7 +184,7 @@ export default {
           this.errorMessage = response.data.message;
           this.isAlert = false;
           setTimeout(() => {
-            this.$router.push({ path: '/postslist' })  
+            this.$router.push({ path: '/' })  
           }, 2000)
         })
         .catch(error => { 

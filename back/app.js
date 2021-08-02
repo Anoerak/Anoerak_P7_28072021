@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const groupomaniaDb = require('./mysqlConfig'); 
+var cors = require('cors')
+
+app.use(cors())
 
 const userRoutes = require('./routes/user');
 // const postsListlRoutes = require('./routes/postsList');
