@@ -80,12 +80,12 @@ exports.login = (req, res) => {
                             message: 'Connection valide, redirection en cours.',
                             token: jwt.sign(
                                 { userId: result[0].id },
-                                '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz',
+                                'RANDOM_TOKEN',
                                 { expiresIn: '24h'}
                             ), 
                             userId: result[0].id
                         });
-                })
+                    })
                 .catch(() => {
                     return res.status(500).json({ message: "Erreur de connexion"});
                 })

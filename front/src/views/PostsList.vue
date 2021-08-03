@@ -105,9 +105,9 @@ export default {
     },
     displayAllPosts(){
         axios.get('http://localhost:3000/PostsList/getAll/',
-          // { headers: {
-          //   'Authorization': `token ${this.$store.state.tokenToCheck}`
-          //   }}
+          { headers: {
+            'Authorization': `token ${this.$store.state.tokenToCheck}`
+            }}
             )
         .then(response => {
           console.log(response)

@@ -2,7 +2,7 @@
     <section class="hero2 is-success is-fullheight">
         <div class="hero-body">
             <div class="container has-text-centered">
-              <div class="column is-6 is-offset-3" v-if="loggedIn">
+              <div class="column is-6 is-offset-3" v-if="!loggedIn">
                     <h3 class="title has-text-black">Vous êtes connecté en tant que</h3>
                       <button class="button is-danger is-outlined" @click.prevent="logout">
                         <span>Se Déconnecter</span>
@@ -75,7 +75,7 @@ export default {
     return {
       v$: useVuelidate(),
       username: '', 
-      // test: this.$ls.get('token'), 
+      test: this.$localStorage.get('token'), 
       password: '', 
       errorMessage:'',
       token: '',
@@ -100,23 +100,26 @@ export default {
         password: this.password
       }
       axios.post('http://localhost:3000/user/login/', user)
-        .then((response) => {
-          this.errorMessage = response.data.message;
-          this.$ls.set('token', response.data.token);
-          this.$ls.set('userId', response.data.userId);
-          this.$store.state.tokenToCheck = response.data.token;
-          this.$store.state.userId = response.data.userId;
+        .then((res) => {
+          this.errorMessage = res.data.message;
+          this.$localStorage.set('token', res.data.token);
+          this.$localStorage.set('userId', res.data.userId);
+          this.$store.state.tokenToCheck = res.data.token;
+          this.$store.state.tokenToCheck = res.data.token;
+          this.$store.state.userId = res.data.userId;
           this.isAlert = false;
           this.$store.dispatch('getInfos');
           this.$router.push('PostsList');
+          console.log(this.$store.state.username)
         })
         .catch(error => { 
+          console.log(error);
           this.errorMessage = error.response.data.message;
           this.isAlert = true;  
           });
     },
     logout() {
-    this.$ls.clear();
+    this.$localStorage.clear();
     this.$store.commit('LOGOUT');
     this.$store.commit('CLEAR_STATE');
     this.$router.push('');

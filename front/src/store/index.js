@@ -5,29 +5,29 @@ import axios from 'axios'
 
 export default createStore({
     state: {
-        tokenToCheck: '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz',
+        tokenToCheck: '',
         userId: '',
         isValid: 'test',
-        isLogged: false,
-        firstnameUser: '', 
-        lastnameUser: '', 
-        usernameUser: 'default', 
-        avatarUser: '',
-        emailUser: '',
-        privilegesUser: ''
+        isLogged: true,
+        firstname: '', 
+        lastname: '', 
+        username: 'default', 
+        avatar: '',
+        email: '',
+        privileges: ''
     }, 
     getters: {
         isLogged: (state) => {
             return state.isLogged; 
         },
         usernameUser: (state) => {
-            return state.usernameUser;
+            return state.username;
         }    
     },
     mutations: {
         CHECK_TOKEN(state) {
             try{
-                jwt.verify(state.tokenToCheck, '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz');
+                jwt.verify(state.tokenToCheck, 'RANDOM_TOKEN');
                 state.isValid = 'ok';
                 state.isLogged = true;
                 return true;
@@ -47,25 +47,25 @@ export default createStore({
             state.tokenToCheck = '',
             state.userId= '',
             state.isLogged = false,
-            state.firstnameUser= '', 
-            state.lastnameUser= '', 
-            state.usernameUser= '', 
-            state.emailUser= '',
-            state.privilegesUser= '';
+            state.firstname= '', 
+            state.lastname= '', 
+            state.username= '', 
+            state.email= '',
+            state.privileges= '';
         }
     }, actions: {
         getInfos(context) {
                 axios.get('http://localhost:3000/user/getInfos/' + context.state.userId, { headers: {
                 'Authorization': `token ${context.state.tokenToCheck}`
                 }})
-            .then(result => {
-                this.state.firstnameUser = result.data[0].firstname;
-                this.state.lastnameUser = result.data[0].lastname;
-                this.state.usernameUser = result.data[0].username;
-                this.state.emailUser = result.data[0].email;
-                this.state.avatarUser = result.data[0].avatar;
-                this.state.passwordUser = result.data[0].password;
-                this.state.privilegesUser = result.data[0].privileges;
+            .then(res => {
+                this.state.firstname = res.data[0].firstname;
+                this.state.lastname = res.data[0].lastname;
+                this.state.username = res.data[0].username;
+                this.state.email = res.data[0].email;
+                this.state.avatar = res.data[0].avatar;
+                this.state.password = res.data[0].password;
+                this.state.privileges = res.data[0].privileges;
             })
             .catch(error => {
                 console.log("Aucun utilisateur en ligne", error);

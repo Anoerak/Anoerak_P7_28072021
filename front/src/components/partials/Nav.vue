@@ -1,5 +1,6 @@
 <template>
   <nav class="navbar container" role="navigation" aria-label="main navigation">
+
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
         <img src="../../../public/img/app_icons/icon.svg" alt="groupomania_logo_globe">
@@ -14,9 +15,15 @@
 
     <div id="navbar" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item"><router-link to="/postsList" class="navbar-item" v-if="loggedIn">Home</router-link></a>
-        <a class="navbar-item"><router-link to="/about" class="navbar-item">About</router-link></a>
-        <a class="navbar-item"><router-link to="/admin" class="navbar-item" v-if="loggedIn">Admin</router-link></a>
+        <a class="navbar-item">
+          <router-link to="/postsList" class="navbar-item" v-if="loggedIn">Acceuil</router-link>
+        </a>
+        <a class="navbar-item">
+          <router-link to="/about" class="navbar-item">About</router-link>
+        </a>
+        <a class="navbar-item">
+          <router-link to="/admin" class="navbar-item" v-if="loggedIn">Admin</router-link>
+        </a>
       </div>
       <div class="button-block2">
         <router-link class="button-block2" :to="'/userAccount'" v-if="loggedIn">
@@ -25,6 +32,7 @@
         </router-link>
       </div>
     </div>
+
   </nav>
 </template>
 
