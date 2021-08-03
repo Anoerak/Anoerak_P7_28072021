@@ -15,7 +15,7 @@ exports.signup = (req, res, next) => {
         stringChecking.test(user.firstname),
         stringChecking.test(user.username), 
     ]
-    console.log(user)
+    // console.log(user)
 //creation et initialisation algorythme et Mdp
         const algorithm = 'aes-192-cbc';
         const password = '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz';
@@ -44,8 +44,8 @@ exports.signup = (req, res, next) => {
                 }
 // Enregistrement du compte dans la base si nouvel utilisateur
                 else { 
-                    bdd.query('INSERT INTO users SET ?', user,  (erreur, res) => {
-                        if (erreur) throw erreur; 
+                    bdd.query('INSERT INTO users SET ?', user,  (err, resultat) => {
+                        if (err) throw err; 
                         return res.status(201).json({ message: 'Compte validé. Redirection en cours.'});
                     })
                 }

@@ -10,7 +10,7 @@ router.post('/post/',auth, multer, feedControllers.postMessage);
 router.post('/post/comment/', auth, feedControllers.postComment);
 
 //Get routes
-router.get('/getAll/', auth, feedControllers.getAllPosts);
-router.get('/comment/get/:id', auth, feedControllers.getComments);
+router.get('/getAll/', feedControllers.getAllPosts);
+router.get('/comment/get/:id', feedControllers.getComments);
 
 module.exports = router;

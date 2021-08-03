@@ -13,8 +13,7 @@
                     <div class="box">
                         <figure class="avatar">
                             <img src="../../public/img/app_icons/user-regular.svg">
-                            <div class="alert" :class="{'alert-danger': isAlert, 'alert-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}
-                            </div>
+                            <div :class="{'help is-danger': isAlert, 'help is-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
                         </figure>
                         <form>
                             <div class="field">

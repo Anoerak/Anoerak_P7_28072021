@@ -7,21 +7,27 @@
                     <div class="box">
                         <figure class="avatar">
                             <img src="../../public/img/app_icons/user-regular.svg">
-                            <div :class="{'alert-danger': isAlert, 'alert-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
+                            <div :class="{'help is-danger': isAlert, 'help is-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
                         </figure>
-                        <form>
+                        <form >
                         <div class="columns row-one">
                             <div class="column is-three-fifths">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Prénom" v-model="firstname" @blur="v$.firstname.$touch()">
+                                        <input class="input is-normal" type="text" placeholder="Prénom" v-model="v$.firstname.$model">
+                                          <div class="input-errors" v-for="(error, index) of v$.firstname.$errors" :key="index">
+                                            <div class="help is-danger">{{ error.$message }}</div>
+                                          </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="column">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Nom" v-model="lastname" @blur="v$.lastname.$touch()">
+                                        <input class="input is-normal" type="text" placeholder="Nom" v-model="v$.lastname.$model">
+                                        <div class="input-errors" v-for="(error, index) of v$.lastname.$errors" :key="index">
+                                          <div class="help is-danger">{{ error.$message }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +36,7 @@
                             <div class="column is-half">
                                 <div class="control">
                                     <div class="input">
-                                        <select v-model="division" @blur="v$.division.$touch()">
+                                        <select v-model="v$.division.$model">
                                             <option>-selection-</option>
                                             <option>Accueil</option>
                                             <option>Compta</option>
@@ -40,44 +46,57 @@
                                             <option>Logistique</option>
                                             <option>Direction</option>
                                         </select>
+                                        <div class="input-errors" v-for="(error, index) of v$.division.$errors" :key="index">
+                                          <div class="help is-danger">{{ error.$message }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="column is-half">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Pseudo" v-model="username" @blur="v$.username.$touch()">
+                                        <input class="input is-normal" type="text" placeholder="Pseudo" v-model="v$.username.$model">
+                                        <div class="input-errors" v-for="(error, index) of v$.username.$errors" :key="index">
+                                          <div class="help is-danger">{{ error.$message }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                             <div class="field">
-                                <div class="control" :class="{invalid: v$.email.$error}">
-                                    <input class="input is-normal" type="email" id="email" placeholder="Email" autofocus="" v-model="email" @blur="v$.email.$touch()">
-                                    <span v-if="!v$.email.email" id="emailHelp" class="form-text">L'adresse email fournie est invalide. Merci de respecter le format xxx@xxx.xx</span>
+                                <div class="control">
+                                    <input class="input is-normal" type="email" id="email" placeholder="Email" autofocus="" v-model="v$.email.$model">
+                                    <div class="input-errors" v-for="(error, index) of v$.email.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="field">
-                                <div class="control" :class="{invalid: v$.password.$error}">
-                                    <input class="input is-normal" type="password" id="password" placeholder="Mot de Passe" v-model="password" @blur="v$.password.$touch()">
-                                    <span v-if="!v$.password.minLength" id="emailHelp" class="form-text">Le mot de passe doit contenir au moins 6 caractères</span>
-                                    <span v-if="!v$.password.syntaxe && password != ''" id="nomHelp" class="form-text">Le mot de passe contient des caractères non autorisés</span>
-
+                                <div class="control">
+                                    <input class="input is-normal" type="password" id="password" placeholder="Mot de Passe" v-model="v$.password.$model">
+                                    <div class="input-errors" v-for="(error, index) of v$.password.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="field">
-                                <div class="control" :class="{invalid: v$.validation.$error}">
-                                    <input class="input is-normal" type="password" id="validation" placeholder="Confirmez votre Mot de Passe" v-model="validation" @blur="v$.validation.$touch()">
-                                    <span v-if="!v$.validation.passwordCheck && validation != ''" id="nomHelp" class="form-text">La confirmation n'est pas identique au mot de passe {{ v$.validation.syntaxe }}</span>
+                                <div class="control">
+                                    <input class="input is-normal" type="password" id="validation" placeholder="Confirmez votre Mot de Passe" v-model="v$.confirmPassword.$model">
+                                    <div class="input-errors" v-for="(error, index) of v$.confirmPassword.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <button class="button is-block is-success is-large is-fullwidth" :disabled="v$.$invalid" @click.prevent="signUpUser">S'enregistrer <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </form>
                     </div>
+                    <p class="has-text-grey">
+                      <a @click="$router.push('/')">Se Connecter</a> &nbsp;·&nbsp;
+                    </p>
                 </div>
             </div>
         </div>
@@ -104,71 +123,95 @@ import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import axios from 'axios'
 
+export function validName(name) {
+  let validNamePattern = new RegExp("^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$");
+  if (validNamePattern.test(name)){
+    return true;
+  }
+  return false;
+}
+export function validUsername(name) {
+  let validUsernamePattern = new RegExp("^[a-z A-Z0-9-]+(?:[-'\\s][a-zA-Z]+)*$");
+  if (validUsernamePattern.test(name)){
+    return true;
+  }
+  return false;
+}
+export function validPassword(name) {
+  let validPasswordPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$");
+  if (validPasswordPattern.test(name)){
+    return true;
+  }
+  return false;
+}
+
 export default {
+
+  setup () {
+    return { v$: useVuelidate () }
+  },
+
   data() {
     return {
-      v$: useVuelidate(),
       username: '',
       email: '',
       firstname: '',
       lastname:'',
       division:'',
       password: '',
-      validation: '',
+      confirmPassword: '',
       errorMessage: '', 
       isAlert: false
     }
   },
+
   validations () {
     return {
-      email: {
-        required,
-        email
-      },
-      username: {
-        required,
-        minLength: minLength(2),
-        syntaxe: value => {
-          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-        }
-      },
-      division: {
-        required,
-        minLength: minLength(2),
-        syntaxe: value => {
-          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-        }
-      },
-
-      lastname: {
-        required,
-        minLength: minLength(2),
-        syntaxe: value => {
-          return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-        }
-      },
+        lastname: {
+          required,
+          minLength: minLength(2),
+          name_validation: {
+              $validator: validName,
+              $message: 'Nom invalide. Utiliser uniquement des lettres, tirets (-) et espaces'
+            } 
+        },
         firstname: {
           required,
           minLength: minLength(2),
-          syntaxe: value => {
-            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-          }
-      },
-        password: {
+          name_validation: {
+            $validator: validName,
+            $message: 'Prénom invalide. Utiliser uniquement des lettres, tirets (-) et espaces'
+          } 
+        },
+        division: {
+          required,
+        },
+        username: {
           required,
           minLength: minLength(2),
-          syntaxe: value => {
-            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{5,}$/.test(value);
-          }
-      },
-      validation () {
-        return {
+          name_validation: {
+              $validator: validUsername,
+              $message: 'Pseudo invalide. Caractères spéciaux interdits'
+            } 
+        },
+        email: {
           required,
-          passwordCheck: sameAs('password')
+          email
+        },
+        password: {
+          required,
+          password_validation: {
+              $validator: validPassword,
+              $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial'
+            } 
+        },
+        confirmPassword: {
+          required,
+          sameAsPassword: sameAs(this.password)
         }
-      }
     }
   }, 
+
   methods: {
     signUpUser() {
         let user = {
@@ -184,7 +227,7 @@ export default {
           this.errorMessage = response.data.message;
           this.isAlert = false;
           setTimeout(() => {
-            this.$router.push({ path: '/' })  
+            this.$router.push({ path: '/PostsList' })  
           }, 2000)
         })
         .catch(error => { 
@@ -193,5 +236,5 @@ export default {
           });
     }
   }
-};
+}
 </script>

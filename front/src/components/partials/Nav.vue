@@ -11,11 +11,12 @@
         <span aria-hidden="true"></span>
       </a>
     </div>
+
     <div id="navbar" class="navbar-menu">
       <div class="navbar-start">
-        <router-link to="/postsList" class="navbar-item" v-if="loggedIn">Home</router-link>
-        <router-link to="/about" class="navbar-item">About</router-link>
-        <router-link to="/admin" class="navbar-item" v-if="loggedIn">Admin</router-link>
+        <a class="navbar-item"><router-link to="/postsList" class="navbar-item" v-if="loggedIn">Home</router-link></a>
+        <a class="navbar-item"><router-link to="/about" class="navbar-item">About</router-link></a>
+        <a class="navbar-item"><router-link to="/admin" class="navbar-item" v-if="loggedIn">Admin</router-link></a>
       </div>
       <div class="button-block2">
         <router-link class="button-block2" :to="'/userAccount'" v-if="loggedIn">
