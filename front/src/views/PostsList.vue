@@ -24,25 +24,12 @@
 
 
 <script>
-import PostCard from '../components/PostCard';
-import PostCreate from './PostCreate.vue';
-import User from './UserAccount.vue'
-import {mapState} from 'vuex'
 import axios from 'axios'
+
 
 
 export default {
   name: 'PostsList',
-  components : {
-   PostCard,
-   // eslint-disable-next-line
-   PostCreate,
-  // eslint-disable-next-line
-   User
-  },
-  computed:{
-    ...mapState(['article', 'posts']),
-  },
   data() {
     return {
         displayFormPost: false,

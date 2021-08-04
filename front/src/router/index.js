@@ -8,6 +8,7 @@ import PostSingle from '../views/PostSingle.vue'
 import PostCreate from '../views/PostCreate.vue'
 import UserAccount from '../views/UserAccount.vue'
 import PostComment from '../components/PostComments.vue'
+
 import Admin from '../views/Admin'
 
 
@@ -19,17 +20,19 @@ export default createRouter({
     {
       path: '/',
       name: 'Home',
-      component: login
+      component: login,
+      title: 'Groupomania'
     },
     {
       path: '/about',
-      name: 'About',
+      name: 'A propos',
       component: About
     },
     {
       path: '/register',
       name: 'Register',
-      component: Register
+      component: Register,
+      title: 'Groupomania - register'
     },
     {
       path: '/userAccount',

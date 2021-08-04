@@ -2,8 +2,8 @@
     <section class="hero2 is-success is-fullheight">
         <div class="hero-body">
             <div class="container has-text-centered">
-              <div class="column is-6 is-offset-3" v-if="!loggedIn">
-                    <h3 class="title has-text-black">Vous êtes connecté en tant que</h3>
+              <div class="column is-6 is-offset-3" v-if="loggedIn">
+                    <h3 class="title has-text-black">Vous êtes connecté en tant que {{ username }}</h3>
                       <button class="button is-danger is-outlined" @click.prevent="logout">
                         <span>Se Déconnecter</span>
                       </button>
@@ -11,7 +11,7 @@
                 <div class="column is-6 is-offset-3" v-if="!loggedIn">
                     <h3 class="title has-text-black">Connexion</h3>
                     <div class="box">
-                        <figure class="avatar">
+                        <figure class="profilPicture">
                             <img src="../../public/img/app_icons/user-regular.svg">
                             <div :class="{'help is-danger': isAlert, 'help is-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
                         </figure>
@@ -53,7 +53,7 @@
         background-color: #FFF;
         & .box{
             border-radius: 10px;
-            & .avatar{
+            & .profilPicture{
                 & img{
                     max-width: 5rem;
                 }
@@ -100,17 +100,15 @@ export default {
         password: this.password
       }
       axios.post('http://localhost:3000/user/login/', user)
-        .then((res) => {
+        .then(res => {
           this.errorMessage = res.data.message;
           this.$localStorage.set('token', res.data.token);
           this.$localStorage.set('userId', res.data.userId);
-          this.$store.state.tokenToCheck = res.data.token;
           this.$store.state.tokenToCheck = res.data.token;
           this.$store.state.userId = res.data.userId;
           this.isAlert = false;
           this.$store.dispatch('getInfos');
           this.$router.push('PostsList');
-          console.log(this.$store.state.username)
         })
         .catch(error => { 
           console.log(error);

@@ -25,8 +25,8 @@
           <router-link to="/admin" class="navbar-item" v-if="loggedIn">Admin</router-link>
         </a>
       </div>
-      <div class="button-block2">
-        <router-link class="button-block2" :to="'/userAccount'" v-if="loggedIn">
+      <div class="button-block2" v-if="loggedIn">
+        <router-link class="button-block2" :to="'/userAccount'" >
           <button class="button is-xl is-dark" ></button>
           <p>Profil</p>
         </router-link>
@@ -40,7 +40,18 @@
 <script>
 
 export default {
-    name: 'Nav',
+  name: 'Nav',
+  computed: {
+    loggedIn() {
+      return this.$store.getters.isLogged; 
+    }, 
+    isValid(){
+      return this.$store.state.isValid;
+    },
+    tokenToCheck() {
+      return this.$store.state.tokenToCheck;
+    }
+  },
 }
 </script>
 

@@ -5,16 +5,17 @@ import axios from 'axios'
 
 export default createStore({
     state: {
-        tokenToCheck: '',
         userId: '',
-        isValid: 'test',
-        isLogged: true,
-        firstname: '', 
         lastname: '', 
-        username: 'default', 
-        avatar: '',
+        firstname: '',
+        username: 'default',
         email: '',
-        privileges: ''
+        division: '',
+        tokenToCheck: '',
+        profilPicture: '',
+        privileges: '',
+        isValid: 'test',
+        isLogged: false
     }, 
     getters: {
         isLogged: (state) => {
@@ -63,8 +64,9 @@ export default createStore({
                 this.state.lastname = res.data[0].lastname;
                 this.state.username = res.data[0].username;
                 this.state.email = res.data[0].email;
-                this.state.avatar = res.data[0].avatar;
                 this.state.password = res.data[0].password;
+                this.state.division = res.data[0].division;
+                this.state.profilPicture = res.data[0].profilPicture;
                 this.state.privileges = res.data[0].privileges;
             })
             .catch(error => {

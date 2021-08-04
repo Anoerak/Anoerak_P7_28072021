@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <Nav />
-    <Hero />
+    <nav>    
+      <Nav />
+    </nav>
+    <header>
+      <Hero />
+    </header>
     <router-view/>
   </div>
 </template>
@@ -11,31 +15,46 @@
 import Nav from './components/partials/Nav.vue'
 import Hero from './components/partials/Hero.vue'
 
+
 export default {
   components: {
     Nav, 
     Hero
   },
-  beforeUpdate() {
-      console.log('', this.$store.state.tokenToCheck);
+    beforeCreate() {
+      console.log('beforeCreate : ', this.$store.state.username);
     this.$store.state.tokenToCheck = this.$localStorage.get('token');
     this.$store.state.userId = this.$localStorage.get('userId');
+    this.$store.dispatch('getInfos');
     this.$store.commit('CHECK_TOKEN');
   },
-    beforeCreate() {
-      console.log('', this.$store.state.token);
-    // this.$store.state.tokenToCheck = this.$localStorage.get('token');
-    // this.$store.state.userId = this.$localStorage.get('userId');
+    created() {
+      console.log('created : ', this.$store.state.username);
+    this.$store.state.tokenToCheck = this.$localStorage.get('token');
+    this.$store.state.userId = this.$localStorage.get('userId');
     this.$store.dispatch('getInfos');
     this.$store.commit('CHECK_TOKEN');
   },
   beforeMount() {
-      console.log('', this.$store.state.avatarUser);
+      console.log('beforeMount : ', this.$store.state.username);
+    this.$store.state.tokenToCheck = this.$localStorage.get('token');
+    this.$store.state.userId = this.$localStorage.get('userId');
     this.$store.dispatch('getInfos');
+    this.$store.commit('CHECK_TOKEN');
   },
-  created() {
-    console.log('', this.$store.state.avatarUser);
-    console.log('');
+  beforeUpdate() {
+      console.log('beforeUpdate : ', this.$store.state.username);
+    this.$store.state.tokenToCheck = this.$localStorage.get('token');
+    this.$store.state.userId = this.$localStorage.get('userId');
+    this.$store.dispatch('getInfos');
+    this.$store.commit('CHECK_TOKEN');
+  },
+  updated() {
+      console.log('updated : ', this.$store.state.username);
+    this.$store.state.tokenToCheck = this.$localStorage.get('token');
+    this.$store.state.userId = this.$localStorage.get('userId');
+    this.$store.dispatch('getInfos');
+    this.$store.commit('CHECK_TOKEN');
   }
 }
 </script>
