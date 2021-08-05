@@ -18,7 +18,7 @@ exports.signup = (req, res, next) => {
     // console.log(user)
 //creation et initialisation algorythme et Mdp
         const algorithm = 'aes-192-cbc';
-        const password = '¼<HM0¯¶WÝÛðãç°åò;Þº¡þbÚ¼,:=~x:Fz';
+        const password = 'RANDOM_TOKEN';
 //récupération de la clé de l'objet Cipher
         const key = crypto.scryptSync(password, 'salt', 24);
 //création et initialisation de l'iv
@@ -58,11 +58,12 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res) => {
-    let string = /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{2,}$/;
+    let userN = /^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$/;
+    let userP = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/;
     let user = req.body;
     let checking = [
-        string.test(user.username),
-        string.test(user.password) 
+        userN.test(user.username),
+        userP.test(user.password) 
     ]
     if(checking.every(Boolean)) {
 // Si présence d'un username, recherche du password

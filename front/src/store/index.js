@@ -6,14 +6,14 @@ import axios from 'axios'
 export default createStore({
     state: {
         userId: '',
-        lastname: '', 
-        firstname: '',
-        username: 'default',
-        email: '',
-        division: '',
+        lastnameS: '', 
+        firstnameS: '',
+        usernameS: '',
+        emailS: '',
+        divisionS: '',
         tokenToCheck: '',
-        profilPicture: '',
-        privileges: '',
+        profilPictureS: '',
+        privilegesS: '',
         isValid: 'test',
         isLogged: false
     }, 
@@ -21,8 +21,8 @@ export default createStore({
         isLogged: (state) => {
             return state.isLogged; 
         },
-        usernameUser: (state) => {
-            return state.username;
+        usernameS: (state) => {
+            return state.usernameS;
         }    
     },
     mutations: {
@@ -45,14 +45,14 @@ export default createStore({
             state.isLogged = false;
         },
         CLEAR_STATE(state) {
-            state.tokenToCheck = '',
             state.userId= '',
+            state.firstnameS= '', 
+            state.lastnameS= '', 
+            state.usernameS= '', 
+            state.emailS= '',
+            state.privilegesS= '',
             state.isLogged = false,
-            state.firstname= '', 
-            state.lastname= '', 
-            state.username= '', 
-            state.email= '',
-            state.privileges= '';
+            state.tokenToCheck = '';
         }
     }, actions: {
         getInfos(context) {
@@ -60,14 +60,14 @@ export default createStore({
                 'Authorization': `token ${context.state.tokenToCheck}`
                 }})
             .then(res => {
-                this.state.firstname = res.data[0].firstname;
-                this.state.lastname = res.data[0].lastname;
-                this.state.username = res.data[0].username;
-                this.state.email = res.data[0].email;
-                this.state.password = res.data[0].password;
-                this.state.division = res.data[0].division;
-                this.state.profilPicture = res.data[0].profilPicture;
-                this.state.privileges = res.data[0].privileges;
+                this.state.firstnameS = res.data[0].firstname;
+                this.state.lastnameS = res.data[0].lastname;
+                this.state.usernameS = res.data[0].username;
+                this.state.emailS = res.data[0].email;
+                this.state.passwordS = res.data[0].password;
+                this.state.divisionS = res.data[0].division;
+                this.state.profilPictureS = res.data[0].profilPicture;
+                this.state.privilegesS = res.data[0].privileges;
             })
             .catch(error => {
                 console.log("Aucun utilisateur en ligne", error);

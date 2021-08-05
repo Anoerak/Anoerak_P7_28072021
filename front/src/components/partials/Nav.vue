@@ -2,9 +2,11 @@
   <nav class="navbar container" role="navigation" aria-label="main navigation">
 
     <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <img src="../../../public/img/app_icons/icon.svg" alt="groupomania_logo_globe">
-        <strong class="is-size-4">Groupomania</strong>
+      <a>
+        <router-link class="navbar-item" to="/">
+          <img src="../../../public/img/app_icons/icon.svg" alt="groupomania_logo_globe">
+          <strong class="is-size-4">Groupomania</strong>
+        </router-link>
       </a>
       <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
         <span aria-hidden="true"></span>
@@ -16,17 +18,17 @@
     <div id="navbar" class="navbar-menu">
       <div class="navbar-start">
         <a class="navbar-item">
-          <router-link to="/postsList" class="navbar-item" v-if="loggedIn">Acceuil</router-link>
+          <router-link to="/postsList" class="navbar-item" v-if="isLogged == true">Acceuil</router-link>
         </a>
         <a class="navbar-item">
           <router-link to="/about" class="navbar-item">About</router-link>
         </a>
         <a class="navbar-item">
-          <router-link to="/admin" class="navbar-item" v-if="loggedIn">Admin</router-link>
+          <router-link to="/admin" class="navbar-item" v-if="privilegesS == 'admin'">Admin</router-link>
         </a>
       </div>
-      <div class="button-block2" v-if="loggedIn">
-        <router-link class="button-block2" :to="'/userAccount'" >
+      <div class="button-block2" >
+        <router-link class="button-block2" :to="'/userAccount'" v-if="isLogged == true">
           <button class="button is-xl is-dark" ></button>
           <p>Profil</p>
         </router-link>
@@ -38,6 +40,7 @@
 
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
   name: 'Nav',
@@ -50,7 +53,20 @@ export default {
     },
     tokenToCheck() {
       return this.$store.state.tokenToCheck;
-    }
+    },
+    ...mapState([
+        'userId',
+        'lastnameS',
+        'firstnameS',
+        'usernameS',
+        'emailS',
+        'divisionS',
+        'tokenToCheck',
+        'profilPictureS',
+        'privilegesS',
+        'isValid',
+        'isLogged'
+    ])
   },
 }
 </script>

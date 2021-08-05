@@ -30,6 +30,7 @@
                                 <div class="field">
                                     <div class="control">
                                         <input class="input is-normal" type="text" placeholder="Prénom">
+                                        {{ firstnameS}}
                                     </div>
                                 </div>
                             </div>
@@ -37,6 +38,7 @@
                                 <div class="field">
                                     <div class="control">
                                         <input class="input is-normal" type="text" placeholder="Nom">
+                                        {{ lastnameS }}
                                     </div>
                                 </div>
                             </div>
@@ -62,6 +64,7 @@
                                 <div class="field">
                                     <div class="control">
                                         <input class="input is-normal" type="text" placeholder="Pseudo">
+                                        {{ usernameS}}
                                     </div>
                                 </div>
                             </div>
@@ -107,6 +110,7 @@
 import useVuelidate from '@vuelidate/core'
 import { required, sameAs } from '@vuelidate/validators'
 import axios from 'axios'
+import { mapState } from 'vuex';
 
 
 export function validName(name) {
@@ -305,6 +309,21 @@ export default {
         },
         tokenToCheck() {
         return this.$store.state.tokenToCheck;
+        },
+          computed: {
+            ...mapState([
+                    'userId',
+                    'lastnameS',
+                    'firstnameS',
+                    'usernameS',
+                    'emailS',
+                    'divisionS',
+                    'tokenToCheck',
+                    'profilPictureS',
+                    'privilegesS',
+                    'isValid',
+                    'isLogged'
+            ])
         }
     }   
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="posts container">
+  <div class="posts container" v-if="isLogged">
     <router-link :to="'/Create/'">
     <button class="button is-info  is-pulled-right">Ajouter votre Post</button>
     </router-link>
@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios'
-
+import { mapState } from 'vuex'
 
 
 export default {
@@ -160,6 +160,21 @@ export default {
   },
   beforeupdated() {
       this.displayAllPosts();
+  },
+  computed: {
+    ...mapState([
+            'userId',
+            'lastnameS',
+            'firstnameS',
+            'usernameS',
+            'emailS',
+            'divisionS',
+            'tokenToCheck',
+            'profilPictureS',
+            'privilegesS',
+            'isValid',
+            'isLogged'
+    ])
   }
 }
 

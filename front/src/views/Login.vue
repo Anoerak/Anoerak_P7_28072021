@@ -3,7 +3,7 @@
         <div class="hero-body">
             <div class="container has-text-centered">
               <div class="column is-6 is-offset-3" v-if="loggedIn">
-                    <h3 class="title has-text-black">Vous êtes connecté en tant que {{ username }}</h3>
+                    <h3 class="title has-text-black">Vous êtes connecté en tant que {{ usernameS }}</h3>
                       <button class="button is-danger is-outlined" @click.prevent="logout">
                         <span>Se Déconnecter</span>
                       </button>
@@ -18,13 +18,19 @@
                         <form>
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" id="username" type="text" placeholder="Pseudo" autofocus="" v-model="username" />
+                                    <input class="input is-large" id="username" type="text" placeholder="Pseudo" autofocus="" v-model="v$.username.$model" />
+                                      <div class="input-errors" v-for="(error, index) of v$.username.$errors" :key="index">
+                                        <div class="help is-danger">{{ error.$message }}</div>
+                                      </div>
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-large" id="password" type="password" placeholder="Mot de Passe" v-model="password" />
+                                    <input class="input is-large" id="password" type="password" placeholder="Mot de Passe" v-model="v$.password.$model" />
+                                    <div class="input-errors" v-for="(error, index) of v$.password.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="field">
@@ -67,6 +73,23 @@
 import useVuelidate from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
 import axios from 'axios'
+import { mapState } from 'vuex'
+
+export function validUsername(name) {
+  let validUsernamePattern = new RegExp("^[a-z A-Z0-9-]+(?:[-'\\s][a-zA-Z]+)*$");
+  if (validUsernamePattern.test(name)){
+    return true;
+  }
+  return false;
+}
+export function validPassword(name) {
+  let validPasswordPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$");
+  if (validPasswordPattern.test(name)){
+    return true;
+  }
+  return false;
+}
+
 
 export default {
 
@@ -91,7 +114,8 @@ export default {
     },
     tokenToCheck() {
       return this.$store.state.tokenToCheck;
-    }
+    },
+    ...mapState(['usernameS'])
   },
   methods: {
     login() {
@@ -100,7 +124,7 @@ export default {
         password: this.password
       }
       axios.post('http://localhost:3000/user/login/', user)
-        .then(res => {
+        .then((res) => {
           this.errorMessage = res.data.message;
           this.$localStorage.set('token', res.data.token);
           this.$localStorage.set('userId', res.data.userId);
@@ -108,7 +132,9 @@ export default {
           this.$store.state.userId = res.data.userId;
           this.isAlert = false;
           this.$store.dispatch('getInfos');
-          this.$router.push('PostsList');
+          setTimeout(() => {
+            this.$router.go()  
+          }, 1500)
         })
         .catch(error => { 
           console.log(error);
@@ -127,18 +153,19 @@ export default {
     return{
         username: {
           required,
-          minLength: minLength(3),
-          syntaxe: value => {
-            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
+          minLength: minLength(2),
+          name_validation: {
+              $validator: validUsername,
+              $message: 'Pseudo invalide. Caractères spéciaux interdits'
+            } 
         },
         password: {
           required,
-          minLength: minLength(2),
-          syntaxe: value => {
-            return /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{1,}$/.test(value);
-          }
+          password_validation: {
+              $validator: validPassword,
+              $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial'
+          } 
         }
-      }
     }
   }
 }
