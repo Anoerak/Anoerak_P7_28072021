@@ -4,7 +4,7 @@
             <div class="container has-text-centered">
               <div class="column is-6 is-offset-3" v-if="loggedIn">
                     <h3 class="title has-text-black">Vous êtes connecté en tant que {{ usernameS }}</h3>
-                      <button class="button is-danger is-outlined" @click.prevent="logout">
+                      <button class="button is-danger is-outlined is-light" @click.prevent="logout">
                         <span>Se Déconnecter</span>
                       </button>
               </div>
@@ -13,7 +13,7 @@
                     <div class="box">
                         <figure class="profilPicture">
                             <img src="../../public/img/app_icons/user-regular.svg">
-                            <div :class="{'help is-danger': isAlert, 'help is-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
+                            <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
                         </figure>
                         <form>
                             <div class="field">
@@ -39,8 +39,8 @@
                                         Se Souvenir de moi
                                 </label>
                             </div>
-                            <button class="button is-block is-info is-large is-fullwidth" @click.prevent="login">Connexion <i class="fa fa-sign-in" aria-hidden="true"></i></button> <br>
-                            <button class="button is-block is-primary is-normal is-fullwidth" @click="$router.push('/Register')">S'enregistrer <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            <button class="button is-block is-info is-large is-fullwidth" :disabled="v$.$invalid" @click.prevent="login">Connexion <i class="fa fa-sign-in" aria-hidden="true"></i></button> <br>
+                            <button class="button is-block is-primary is-normal is-fullwidth"  @click="$router.push('/Register')">S'enregistrer <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </form>
                     </div>
                     <p class="has-text-grey">

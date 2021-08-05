@@ -8,7 +8,7 @@ exports.signup = (req, res, next) => {
 
 //Vérification de la bonne syntaxe des données reçues via regex + array de vérification
     let emailChecking = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
-    let stringChecking = /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{2,}$/;
+    let stringChecking = /^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$/;
     let checking = [
         emailChecking.test(user.email),
         stringChecking.test(user.lastname),

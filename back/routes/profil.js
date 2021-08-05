@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const multerProfil = require('../middleware/multer-profil-config')
-const auth = require('../middleware/auth');
+const multerProfil = require('../middlewares/multer-profil-config')
+const auth = require('../middlewares/auth');
 
 const profilControllers = require('../controllers/profil');
 
-router.put('/profilPicture/', auth, multerProfil, profilControllers.updateProfilPicture);
-router.put('/changePassword/', auth, profilControllers.changePassword);
-router.put('/deleteAccount/', auth, profilControllers.deleteAccount);
+router.put('/profilPicture/', multerProfil, profilControllers.updateProfilPicture);
+router.put('/updatePassword/', profilControllers.updatePassword);
+router.put('/deleteAccount/', profilControllers.deleteAccount);
 
 module.exports = router;

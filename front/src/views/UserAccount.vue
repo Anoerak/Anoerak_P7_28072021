@@ -7,7 +7,7 @@
                     <div class="box">
                         <form class="profile_picture" action="">
                             <figure class="avatar">
-                                <img src="../../public/img/app_icons/user-regular.svg">
+                                <img :src="profilPictureS">
                             </figure>
                             <div id="user_profilPicture" class="file is-info has-name">
                                 <label class="file-label">
@@ -25,20 +25,18 @@
                             </div>
                         </form>
                         <form>
-                        <div class="columns row-one">
+                        <div class="columns row-one" >
                             <div class="column is-three-fifths">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Prénom">
-                                        {{ firstnameS}}
+                                        <span class="input is-normal" type="text" > {{ firstnameS }} </span>                                       
                                     </div>
                                 </div>
                             </div>
                             <div class="column">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Nom">
-                                        {{ lastnameS }}
+                                        <span class="input is-normal" type="text"> {{ lastnameS }} </span>
                                     </div>
                                 </div>
                             </div>
@@ -47,24 +45,14 @@
                             <div class="column is-half">
                                 <div class="control">
                                     <div class="input">
-                                        <select>
-                                            <option>-selection-</option>
-                                            <option>Accueil</option>
-                                            <option>Compta</option>
-                                            <option>RH</option>
-                                            <option>SAV</option>
-                                            <option>Expédition</option>
-                                            <option>Logistique</option>
-                                            <option>Direction</option>
-                                        </select>
+                                        <span> {{ divisionS}} </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="column is-haf">
                                 <div class="field">
                                     <div class="control">
-                                        <input class="input is-normal" type="text" placeholder="Pseudo">
-                                        {{ usernameS}}
+                                        <span class="input is-normal" type="text"> {{ usernameS}} </span>
                                     </div>
                                 </div>
                             </div>
@@ -72,24 +60,44 @@
 
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-normal" type="password" placeholder="Ancien Mot de Passe" autofocus="">
+                                    <input class="input is-normal" type="password" placeholder="Ancien Mot de Passe" autofocus="" v-model="v$.typedCurrentPassword.$model">
+                                    <div class="input-errors" v-for="(error, index) of v$.typedCurrentPassword.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-normal" type="password" placeholder="Nouveau Mot de Passe">
+                                    <input class="input is-normal" type="password" placeholder="Nouveau Mot de Passe" v-model="v$.newPassword.$model">
+                                    <div class="input-errors" v-for="(error, index) of v$.newPassword.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="control">
-                                    <input class="input is-normal" type="password" placeholder="Confirmez votre Nouveau Mot de Passe">
+                                    <input class="input is-normal" type="password" placeholder="Confirmez votre Nouveau Mot de Passe" v-model="v$.confirmNewPassword.$model">
+                                    <div class="input-errors" v-for="(error, index) of v$.confirmNewPassword.$errors" :key="index">
+                                      <div class="help is-danger">{{ error.$message }}</div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <button class="button is-block is-success is-normal is-fullwidth">Valider <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            <div :class="{'notification is-danger is-light': isAlertPassword, 'notification is-success is-light': !isAlertPassword}" v-if="feedbackMessagePassword != ''"> {{ feedbackMessagePassword }} </div>
+                            <button class="button is-block is-success is-normal is-fullwidth" :disabled="v$.$invalid" @click.prevent="changePassword">Valider <i class="fa fa-sign-in" aria-hidden="true"></i></button>
                         </form>
+                    </div>
+                    <button class="button is-danger is-light" @click.prevent="displayDeleteMessage = !displayDeleteMessage">Supprimer votre compte</button>
+                    <br><br>
+                    <div class="deleteMessage" v-if="displayDeleteMessage">
+                        <h3>Etes vous certain de vouloir supprimer votre compte ?</h3><br>
+                        <div>
+                            <label for="passwordDeleteAccount">Saisissez votre mot de passe :</label><br>
+                            <input class="input is-normal" type="password" placeholder="Votre mot de passe" v-model="passwordDeleteAccount"><br><br>
+                            <button class="button is-danger" @click.prevent="deleteAccount"> Supprimer definitivement votre compte </button>
+                            <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="feedbackDeleteAccount != ''"> {{ feedbackDeleteAccount }} </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,21 +120,6 @@ import { required, sameAs } from '@vuelidate/validators'
 import axios from 'axios'
 import { mapState } from 'vuex';
 
-
-export function validName(name) {
-    let validNamePattern = new RegExp("^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$");
-    if (validNamePattern.test(name)){
-        return true;
-    }
-    return false;
-}
-export function validUsername(name) {
-    let validUsernamePattern = new RegExp("^[a-z A-Z0-9-]+(?:[-'\\s][a-zA-Z]+)*$");
-    if (validUsernamePattern.test(name)){
-        return true;
-    }
-    return false;
-}
 export function validPassword(name) {
     let validPasswordPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$");
     if (validPasswordPattern.test(name)){
@@ -144,21 +137,21 @@ export default {
         return {
             isAlert: true,
             isAlertPassword: false,
+            feedbackMessageprofilPicture: '',
             feedbackMessagePassword: '',
-            displayDeleteMessage: false,
-            feedbackMessageProfilePicture: '',
             imgIsChecked: false, 
             img : {
                 size: 0, 
                 height: 0, 
                 width: 0, 
-                url: this.$store.state.profilePicture
+                url: this.$store.state.profilPictureS
             },
             typedCurrentPassword: '',
             newPassword:'', 
             confirmNewPassword:'',
             feedbackDeleteAccount: '',
             passwordDeleteAccount: '',
+            displayDeleteMessage: false
         }
     },
     validations () {
@@ -196,7 +189,7 @@ export default {
             }
 
             if(!allowedTypes.includes(imageToCheck.type)){
-                this.feedbackMessageProfilePicture = "Veuillez choisir une image au format jpg, jpeg, png et gif"
+                this.feedbackMessageprofilPicture = "Veuillez choisir une image au format jpg, jpeg, png et gif"
                 this.isAlert = true; 
                 this.imgIsChecked = false; 
                 return;
@@ -240,15 +233,15 @@ export default {
                 let formData = new FormData();
                 formData.append("image", file);
                 formData.append("userId", this.$store.state.userId);
-                formData.append("profilePicture", this.$store.state.profilPicture);
-                axios.put('http://localhost:3000/profile/profilePicture/', formData, { 
+                formData.append("profilPicture", this.$store.state.profilPicture);
+                axios.put('http://localhost:3000/profil/profilPicture/', formData, { 
                         headers: {
                             'Content-Type': 'multipart/form-data',
                             'Authorization': `token ${this.$store.state.tokenToCheck}`
                         }})
                 .then(response => {
                     this.isAlert = false;
-                    this.feedbackMessageProfilePicture = response.data.message;
+                    this.feedbackMessageprofilPicture = response.data.message;
                     this.img.size = 0;
                     this.img.height = 0; 
                     this.img.width = 0;
@@ -266,35 +259,42 @@ export default {
                 currentPassword: this.typedCurrentPassword, 
                 newPassword: this.newPassword
             }
-            axios.put('http://localhost:3000/profile/changePassword/', passwordObject, { headers: {
+            axios.put('http://localhost:3000/profil/updatePassword/', passwordObject, { headers: {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
             .then(response => {
                 this.isAlertPassword = false;
                 this.feedbackMessagePassword = response.data.message;
+                setTimeout(() => {
+                    this.$router.go('/userAccount')  
+                }, 1500)
             })
-            .catch(error => {
+            .catch(err => {
                 this.isAlertPassword = true;
-                this.feedbackMessagePassword = error.response.data.message;
+                this.feedbackMessagePassword = err.response.data.message;
             })
         },
         deleteAccount() {
-            let dataDeleteAccount = {
+            let deleteAccountObject = {
                 userId: this.$store.state.userId, 
                 password: this.passwordDeleteAccount
             }
-            axios.put('http://localhost:3000/profile/deleteAccount/', dataDeleteAccount, { headers: {
+            axios.put('http://localhost:3000/profil/deleteAccount/', deleteAccountObject, { headers: {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
             .then(response => {
+                console.log(response)
                 this.feedbackDeleteAccount = response.data.message;
                 this.isAlertDelete = false;
                 this.$ls.clear();
                 this.$store.commit('LOGOUT');
                 this.$store.commit('CLEAR_STATE');
-                this.$router.push('/');
-            })
+                setTimeout(() => {
+                    this.$router.go('/')  
+                }, 1500)
+                })
             .catch(error => {
+                console.log(error)
                 this.feedbackDeleteAccount = error.response.data.message;
                 this.isAlertDelete = true;
                 })
@@ -310,21 +310,19 @@ export default {
         tokenToCheck() {
         return this.$store.state.tokenToCheck;
         },
-          computed: {
-            ...mapState([
-                    'userId',
-                    'lastnameS',
-                    'firstnameS',
-                    'usernameS',
-                    'emailS',
-                    'divisionS',
-                    'tokenToCheck',
-                    'profilPictureS',
-                    'privilegesS',
-                    'isValid',
-                    'isLogged'
-            ])
-        }
+        ...mapState([
+                'userId',
+                'lastnameS',
+                'firstnameS',
+                'usernameS',
+                'emailS',
+                'divisionS',
+                'tokenToCheck',
+                'profilPictureS',
+                'privilegesS',
+                'isValid',
+                'isLogged'
+        ])
     }   
 }
 </script>

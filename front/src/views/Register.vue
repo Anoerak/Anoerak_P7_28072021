@@ -227,7 +227,7 @@ export default {
           this.errorMessage = response.data.message;
           this.isAlert = false;
           setTimeout(() => {
-            this.$router.push({ path: '/PostsList' })  
+            this.$router.push('/')
           }, 2000)
         })
         .catch(error => { 

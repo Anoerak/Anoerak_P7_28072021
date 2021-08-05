@@ -4,14 +4,14 @@ const bcrypt = require('bcrypt');
 
 exports.updateProfilPicture = (req, res, next) => {
 
-    let profilPictureToUpload = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
-    let profilPictureToDelete = req.body.profilPicture.split('/profiles/')[1];
+    let profilPictureToUpload = `${req.protocol}://${req.get('host')}/profils/${req.file.filename}`
+    let profilPictureToDelete = req.body.profilPicture.split('/profils/')[1];
 
     console.log(profilPictureToDelete);
 
     if(profilPictureToDelete != "defaultUser.png") { 
 // Pas de suppression de fichier si l'utilisateur a encore l'image de base
-        fs.unlink(`images/profiles/${profilPictureToDelete}`, () => { 
+        fs.unlink(`images/profils/${profilPictureToDelete}`, () => { 
         })
     }
     
@@ -21,16 +21,16 @@ exports.updateProfilPicture = (req, res, next) => {
     })
 };
 
-exports.changePassword = (req, res, next) => {
-    let syntaxPassword = /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{2,100}$/;
+exports.updatePassword = (req, res, next) => {
+    let regexPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/;
 
-        if(syntaxPassword.test(req.body.currentPassword) && syntaxPassword.test(req.body.newPassword)) {
+        if(regexPassword.test(req.body.currentPassword) && regexPassword.test(req.body.newPassword)) {
             bdd.query('SELECT password FROM users WHERE id="'+req.body.userId+'"', (err, resultat) => {
                 if(err) throw err; 
                 bcrypt.compare(req.body.currentPassword, resultat[0].password)
                 .then(valid => {
                     if(!valid){
-                        if(!valid) return res.status(500).json({ message: "Ce mot de passe ne correspond pas à l'utilisateur."});
+                        if(!valid) return res.status(500).json({ message: "Ce mot de passe ne correspond pas à ce compte"});
                     }
                     bcrypt.hash(req.body.newPassword, 10)
                         .then(hash => {
@@ -48,9 +48,9 @@ exports.changePassword = (req, res, next) => {
 };
 
 exports.deleteAccount = (req,res,next) => {
-    let syntaxPassword = /^[a-z A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ0-9-]{2,100}$/;
+    let regexPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{6,}$/;
 
-    if(syntaxPassword.test(req.body.password)) {
+    if(regexPassword.test(req.body.password)) {
         bdd.query('SELECT password, profilPicture FROM users WHERE id="'+ req.body.userId +'"', (err, resultat) => {
             if(err) throw err; 
             bcrypt.compare(req.body.password, resultat[0].password)
@@ -58,8 +58,8 @@ exports.deleteAccount = (req,res,next) => {
                 if(!valid){
                     if(!valid) return res.status(500).json({ message: "Ce mot de passe ne correspond pas à l'utilisateur."});
                 }
-                let profilPictureToDelete = resultat[0].profilPicture.split('/profiles/')[1]
-                fs.unlink(`images/profiles/${profilPictureToDelete}`, () => { 
+                let profilPictureToDelete = resultat[0].profilPicture.split('/profils/')[1]
+                fs.unlink(`images/profils/${profilPictureToDelete}`, () => { 
                     bdd.query('DELETE FROM users WHERE id="'+ req.body.userId +'"',(err, result) => {
                         if(err) throw err;
                         bdd.query('DELETE FROM posts WHERE authorId="'+ req.body.userId +'"',(err, result) => { 

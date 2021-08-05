@@ -8,7 +8,7 @@ app.use(cors())
 
 const userRoutes = require('./routes/user');
 // const postsListlRoutes = require('./routes/postsList');
-// const userAccountRoutes = require('./routes/userAccount');
+const userAccountRoutes = require('./routes/profil');
 // const adminboardRoutes = require('./routes/adminboard');
 
 var helmet = require('helmet');
@@ -36,7 +36,7 @@ if(!err) {
 
 app.use('/user/', userRoutes);
 // app.use('/postsList/', postsListRoutes);
-// app.use('/userAccount/', userAccountRoutes);
+app.use('/profil/', userAccountRoutes);
 // app.use('/dashBoard/', adminboardRoutes);
 
 module.exports = app;
