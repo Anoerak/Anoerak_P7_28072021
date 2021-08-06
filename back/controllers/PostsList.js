@@ -6,6 +6,8 @@ exports.postMessage = (req, res, next) => {
         let dataPost = {
             authorId: req.body.authorId,
             image: `${req.protocol}://${req.get('host')}/posts/${req.file.filename}`, 
+            title: req.body.title,
+            category: req.body.category,
             message: req.body.message
         }
         bdd.query('INSERT INTO posts SET ?', dataPost,  (err, resultat) => {
@@ -48,7 +50,16 @@ exports.postComment = (req,res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-    bdd.query('SELECT * FROM posts WHERE isflagged="0" ORDER BY id DESC', (err, resultat) => {
+    bdd.query('SELECT * FROM posts WHERE isFlagged="0" ORDER BY date DESC', (err, resultat) => {
+        if(err) throw (err);
+        return res.status(200).json({ resultat });
+    })
+};
+
+exports.getOnePost = (req, res, next) => {
+    const route = useRoute();
+    const ID = Number(route.params.id);
+    bdd.query('SELECT * FROM posts WHERE id ="'+ID+'" ORDER by DESC', (err, resultat) => {
         if(err) throw (err);
         return res.status(200).json({ resultat });
     })

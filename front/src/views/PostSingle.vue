@@ -4,41 +4,41 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            {{ post.name }}
+            name
           </h1>
           <h2 class="subtitle ">
-            <strong>Date:</strong> {{ post.date }}
+            <strong>Date:</strong> {{  }}
             <br>
-            <strong>Heure:</strong> {{ post.time }}
+            <strong>Heure:</strong> time
           </h2>
         </div>
       </div>
     </section>
     <section class="post-content">
       <div class="container">
-        <p class="is-size-4 description">{{ post.description }}</p>
-        <p class="is-size-5"><strong>Division:</strong> {{ post.division }}</p>
-        <p class="is-size-5"><strong>Catégorie:</strong> {{ post.category }}</p>
-        <p class="is-size-5"><strong>Auteur:</strong> {{ post.author }}</p>
+        <p class="is-size-4 description">description</p>
+        <p class="is-size-5"><strong>Division:</strong> division</p>
+        <p class="is-size-5"><strong>Catégorie:</strong> category</p>
+        <p class="is-size-5"><strong>Auteur:</strong> author</p>
         <div class="post-images columns is-multiline has-text-centered">
-          <div v-for="image in post.images" 
+          <!-- <div v-for="image in post.images" 
                 :key="image.id" 
                 class="column is-one-third">
             <img :src="image" :alt="post.name"/>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>
     <section>
       <div id="test">
-        <button class="button is-info  is-pulled-right" @click="show = !show">Poster un commentaire</button>
+        <button class="button is-info  is-pulled-right" @click.prevent="displayCommentEdit = !displayCommentEdit">Poster un commentaire</button>
           <h2 class="subtitle is-4">Vos commentaires</h2>
-              <Comment />
-          <Commentaires 
+              <Comment v-if="displayCommentEdit"/>
+          <!-- <Commentaires 
           v-for="comment in comments"
           :comment="comment"
           :key="comment.id"
-          />
+          /> -->
       </div>
     </section>
   </div>
@@ -46,22 +46,112 @@
 
 
 <script>
-import {mapState} from 'vuex'
-import Commentaires from '../components/PostComments.vue' 
+// import Commentaires from '../components/PostComments.vue' 
 import Comment from '../components/Comment.vue'
+import axios from 'axios'
+import { mapState } from 'vuex'
+import {useRoute} from 'vue-router'
+ 
 
 export default {
+  data() {
+    return {
+      displayCommentEdit: false
+    }
+  },
   components: {
-    Commentaires,
+    // Commentaires,
     Comment
   },
-  computed:{
-    ...mapState(['article', 'posts', 'comment', 'comments'])
+  methods: {
+    displayOnePost(){
+      const route = useRoute();
+      let DI = Number(route.params.id)
+      console.log(DI)
+        axios.get('http://localhost:3000/postsList/getOne/',
+          { headers: {
+            'Authorization': `token ${this.$store.state.tokenToCheck}`
+            }}
+            )
+        .then(response => {
+          console.log(response)
+            this.posts = response.data.resultat; 
+        })
+        .catch(error => {
+            console.log(error.response.data)
+        })
+    },
+    checkImage() {
+        let imageToCheck = this.$refs.file.files[0];
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+
+        if(!imageToCheck || imageToCheck.type.indexOf('image/') !== 0) {
+            this.feedbackMessage = "Erreur dans le type de fichier";
+            this.isAlert = true; 
+            this.imgIsChecked = false;
+            return;
+        }
+
+        if(!allowedTypes.includes(imageToCheck.type)){
+            this.feedbackMessage = "Seules sont autorisées les images jpg, jpeg, png et gif"
+            this.isAlert = true; 
+            this.imgIsChecked = false; 
+            return;
+        }
+
+        this.img.size = imageToCheck.size / 1000;
+
+        if(this.img.size > 5000) {
+            this.feedbackMessage = "L'image transmise est trop lourde (5Mo max)";
+            this.isAlert = true; 
+            this.imgIsChecked = false;
+            return;
+        }
+
+        let fileReader = new FileReader(); 
+        fileReader.readAsDataURL(imageToCheck);
+        fileReader.onload = evt => {
+            let image = new Image();
+            image.onload = () => {
+                this.img.height = image.height;
+                this.img.width = image.width;
+                if(this.img.height > 600 || this.img.width > 600){
+                    this.feedbackMessage = "L'image doit être de taille 600x600 max";
+                    this.isAlert = true; 
+                    this.imgIsChecked = false;
+                    return;
+                }
+            }
+            image.src = evt.target.result;
+        }
+
+        this.imgIsChecked = true;
+        this.feedbackMessage = ''; 
+        this.isAlert = false;
+        this.img.url = URL.createObjectURL(imageToCheck);
+        return;
+    }
+  }, 
+  mounted() {
+      this.displayOnePost();
   },
-  created() {
-    const ID = Number(this.$route.params.id);
-    let post = this.posts.find(article => article.id === ID);
-    this.post = post;
+  beforeupdated() {
+      this.displayOnePost();
+  },
+  computed: {
+    ...mapState([
+            'userId',
+            'lastnameS',
+            'firstnameS',
+            'usernameS',
+            'emailS',
+            'divisionS',
+            'tokenToCheck',
+            'profilPictureS',
+            'privilegesS',
+            'isValid',
+            'isLogged'
+    ]),
   }
 }
 </script>

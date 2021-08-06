@@ -3,7 +3,7 @@
         <article class="media">
         <figure class="media-left">
             <p class="image is-64x64">
-            <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+            <img class="is-rounded" :src="profilPictureS">
             </p>
         </figure>
         <div class="media-content">
@@ -28,15 +28,33 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 
+export default {
+      computed: {
+        ...mapState([
+                'userId',
+                'lastnameS',
+                'firstnameS',
+                'usernameS',
+                'emailS',
+                'divisionS',
+                'tokenToCheck',
+                'profilPictureS',
+                'privilegesS',
+                'isValid',
+                'isLogged'
+        ]),
+    }
+}
 </script>
 
-<style lang="scss" scoped>
-figure{
-    margin-left: 1rem;
-}
-.media-content{
-    margin-right: 1rem;
-}
-</style>
 
+<style lang="scss" scoped>
+    figure{
+        margin-left: 1rem;
+    }
+    .media-content{
+        margin-right: 1rem;
+    }
+</style>

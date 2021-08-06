@@ -6,18 +6,28 @@
     <h2 class="subtitle is-3">
     Consulter les dernières publications de vos collègues.
     </h2><br>
-    <div :class="{'help is-danger': isAlert, 'help is-success': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
+    <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="feedbackMessage != ''">{{ feedbackMessage }}</div>
     <div class="columns is-multiline">
-      <div 
-        v-for="post in posts" 
+    <PostCard @postFlagged="displayAllPosts()" 
+        v-for="(post, postIndex) in posts" 
         :post="post"
         :key="post.id"
-        class="column is-one-quarter" >
-        <router-link
-          :to="'/post/' + post.id" >
+        :id="post.id"
+        :authorId="post.authorId"
+        :title="post.title"
+        :category="post.category"
+        :image="post.image"
+        :message="post.message"
+        :date="post.date"
+        :time="post.time"
+        :nbcomments="post.nbComments"
+        :index="postIndex"
+        :isFlagged="post.isFlagged"
+        class="column is-one-quarter" />
+        <!-- <router-link
+          :to="'/post/' + id" >
           <PostCard :post="post" />
-        </router-link>
-      </div>
+        </router-link> -->
     </div>
   </div>
 </template>
@@ -26,10 +36,10 @@
 <script>
 import axios from 'axios'
 import { mapState } from 'vuex'
+import PostCard from '../components/PostCard.vue'
 
 
 export default {
-  name: 'PostsList',
   data() {
     return {
         displayFormPost: false,
@@ -38,6 +48,7 @@ export default {
         feedbackMessage: '',
         imgIsChecked: false, 
         posts: [],
+        date:[],
         img : {
             size: 0, 
             height: 0, 
@@ -46,58 +57,18 @@ export default {
         }
     }
   },
+  components: {
+    PostCard
+  },
   methods: {
-    postMessage() {
-        if(this.imgIsChecked)
-        {
-            let file = this.$refs.file.files[0];
-            let message = this.messageToPost;
-            let syntaxeMessageAllowed = /^[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{2,100}$/;  
-            if(syntaxeMessageAllowed.test(message)) {
-                const formData = new FormData();
-                formData.append ("authorId", this.$store.state.userId)
-                formData.append("image", file);
-                formData.append("message", message);
-                axios.post('http://localhost:3000/fil/post/', formData, { 
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `token ${this.$store.state.tokenToCheck}`
-                    }
-                })
-                .then(response => {
-                    this.feedbackMessage = response.data.message;
-                    this.isAlert = false; 
-                    this.displayFormPost = false;
-                    this.img.url = '';
-                    this.img.size = 0;
-                    this.img.height = 0; 
-                    this.img.width = 0;
-                    this.messageToPost = '';
-                    this.imgIsChecked = false;
-                    this.displayAllPosts();
-                })
-                .catch(error => {
-                    this.feedbackMessage = error.response.data.message; 
-                    this.isAlert = true; 
-                })
-            }
-            else {
-                this.feedbackMessage = "Le message contient des caractères non autorisés ou est supérieur à 100 caractères"
-                this.isAlert = true; 
-            }
-        } else {
-            this.feedbackMessage = "Erreur avec l'image transmise";
-            this.isAlert = true;
-        }
-    },
     displayAllPosts(){
-        axios.get('http://localhost:3000/PostsList/getAll/',
+        axios.get('http://localhost:3000/postsList/getAll/',
           { headers: {
             'Authorization': `token ${this.$store.state.tokenToCheck}`
             }}
             )
         .then(response => {
-          console.log(response)
+          // console.log(response)
             this.posts = response.data.resultat; 
         })
         .catch(error => {
@@ -174,7 +145,7 @@ export default {
             'privilegesS',
             'isValid',
             'isLogged'
-    ])
+    ]),
   }
 }
 

@@ -1,26 +1,55 @@
 <template>
   <div class="post-card">
-    <div class="card">
-      <div class="card-content" v-bind:style="{ 'background-image': 'url(' + post.images + ')' }">
-        <h2 class="has-text-weight-bold">{{ post.name }}</h2>
-        <small class="post-date">{{ post.date }}</small>
-        <span>{{ post.division }}</span>
+    <router-link :to="'/post/' + id">
+      <div class="card">
+        <div class="card-content" :style="{ 'background-image': 'url(' + image + ')' }">
+          <h2 class="has-text-weight-bold">{{ title }}</h2>
+                <span class="tag is-danger" v-if="nbcomments >0">{{ nbcomments }}</span>
+          <span class="category">{{ category }}</span>
+        </div>
       </div>
-    </div>
+      <p>Posté le {{ moment(date).format('DD.MM.YYYY') }} par {{ authorName }}</p>
+    </router-link>
   </div>
 </template>
 
 
 <script>
-import {mapState} from 'vuex'
+import axios from 'axios'
+import moment from 'moment'
 
 export default {
-  props: [
-    'post'
-  ],
-  computed:{
-    ...mapState(['article', 'posts'])
-  }
+    props: ['image', 'title', 'date', 'time', 'category', 'authorId', 'nbcomments', 'id'],
+    created: function () {
+      this.moment = moment;
+    },
+    data() {
+        return {
+            authorName: '',
+            feedbackMessage: '',
+        }
+    },
+    methods : {
+        getInfos(authorId) {
+            axios.get('http://localhost:3000/user/getInfos/' + authorId, { 
+                        headers: {
+                            'Authorization': `token ${this.$store.state.tokenToCheck}`
+                        }
+                    })
+            .then(result => {
+              // console.log('author : '+ result.data[0].profilPicture)
+                    this.authorName = result.data[0].username;
+                    this.profilPictureAuthor = result.data[0].profilPicture;
+            })
+            .catch(error => {
+                console.log('author : '+error)
+            })
+        },
+    }, 
+    mounted() {
+        this.getInfos(this.authorId);
+        // console.log('this author : '+this.authorId)
+    },
 }
 </script>
 
@@ -34,7 +63,6 @@ export default {
     box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.30), 3px 3px 6px rgba(0, 0, 0, 0.15);
     transition: 300ms ease-in-out;
     border-radius: 10px;
-    border: 1px black solid;
     &:hover{
       box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.30), 3px 3px 12px rgba(0, 0, 0, 0.15);
     }
@@ -53,7 +81,7 @@ export default {
       padding: 10px;
       height: 200px;
       width: 100%;
-      span {
+      .category {
         font-size: 18px;
         text-align: center;
         color: #FFF;
@@ -64,6 +92,15 @@ export default {
         border-radius: 0 0 10px 10px;
         bottom: 0px;
         right: 0;
+      }
+      .tag {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        border-radius: 100vw;
+        width: 25px;
+        height: 25px;
+        color: #FFF;
       }
       h2 {
         font-size: 1.25rem;

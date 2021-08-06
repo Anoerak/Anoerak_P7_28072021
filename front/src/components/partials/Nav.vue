@@ -29,7 +29,7 @@
       </div>
       <div class="button-block2" >
         <router-link class="button-block2" :to="'/userAccount'" v-if="isLogged == true">
-          <button class="button is-xl is-dark" ></button>
+          <button class="button is-xl is-dark" :style="{ 'background-image': 'url(' + profilPictureS + ')' }" ></button>
           <p>Profil</p>
         </router-link>
       </div>
@@ -93,7 +93,11 @@ export default {
         align-items: center;
         justify-content: center;
         & .is-dark{
-          background-image: url('../../../public/img/app_icons/user-regular.svg');
+          width: 50px;
+          height: 50px;
+          border-radius: 100vw;
+          background-position: center;
+          background-size: cover;
           background-color: transparent;
           background-repeat: no-repeat;
         }
