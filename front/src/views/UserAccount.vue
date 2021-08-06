@@ -6,12 +6,13 @@
                     <h3 class="title has-text-black">Modifier votre Profil</h3>
                     <div class="box">
                         <form class="profile_picture" action="">
+                        <div :class="{'notification is-success is-light': !isAlert, 'notification is-danger is-light': isAlert}" v-if="feedbackMessageProfilPicture != ''"> {{ feedbackMessageProfilPicture }} </div>
                             <figure class="avatar">
-                                <img :src="profilPictureS">
+                                <img :src="img.url">
                             </figure>
                             <div id="user_profilPicture" class="file is-info has-name">
                                 <label class="file-label">
-                                    <input class="file-input" type="file" name="resume" onchange="updateValue">
+                                    <input class="file-input" type="file" ref="file" name="file" accept="image/*" @change="checkImage()" >
                                     <span class="file-cta">
                                     <i class="fas fa-upload"></i>
                                     <span class="file-label">
@@ -19,10 +20,11 @@
                                     </span>
                                     </span>
                                     <span class="file-name">
-                                        Aucun fichier
+                                        {{img.url}}
                                     </span>
                                 </label>
                             </div>
+                            <button class="button is-primary" :disabled="!imgIsChecked" @click.prevent="changeProfilPicture">Valider</button><br>
                         </form>
                         <form>
                         <div class="columns row-one" >
@@ -106,15 +108,6 @@
 </template>
 
 <script>
-//  const fileInput = document.querySelector('#user_profilPicture input[type=file]');
-//   fileInput.addEventListener("change", updateValue);
-//   function updateValue() {
-//     if (fileInput.files.length > 0) {
-//       const fileName = document.querySelector('#user_profilPicture .file-name');
-//       fileName.textContent = fileInput.files[0].name;
-//     }
-//   }
-
 import useVuelidate from '@vuelidate/core'
 import { required, sameAs } from '@vuelidate/validators'
 import axios from 'axios'
@@ -137,7 +130,7 @@ export default {
         return {
             isAlert: true,
             isAlertPassword: false,
-            feedbackMessageprofilPicture: '',
+            feedbackMessageProfilPicture: '',
             feedbackMessagePassword: '',
             imgIsChecked: false, 
             img : {
@@ -189,7 +182,7 @@ export default {
             }
 
             if(!allowedTypes.includes(imageToCheck.type)){
-                this.feedbackMessageprofilPicture = "Veuillez choisir une image au format jpg, jpeg, png et gif"
+                this.feedbackMessageProfilPicture = "Veuillez choisir une image au format jpg, jpeg, png et gif"
                 this.isAlert = true; 
                 this.imgIsChecked = false; 
                 return;
@@ -241,12 +234,11 @@ export default {
                         }})
                 .then(response => {
                     this.isAlert = false;
-                    this.feedbackMessageprofilPicture = response.data.message;
+                    this.feedbackMessageProfilPicture = response.data.message;
                     this.img.size = 0;
                     this.img.height = 0; 
                     this.img.width = 0;
                     this.imgIsChecked = false;
-                    this.$store.dispatch('getInfos');
                 })
                 .catch (error => {
                     console.log(error);
@@ -282,16 +274,16 @@ export default {
             axios.put('http://localhost:3000/profil/deleteAccount/', deleteAccountObject, { headers: {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
-            .then(response => {
+            .then((response) => {
                 console.log(response)
                 this.feedbackDeleteAccount = response.data.message;
                 this.isAlertDelete = false;
-                this.$ls.clear();
+                setTimeout(() => {
+                    this.$router.go()  
+                }, 2000);
+                this.$localStorage.clear();
                 this.$store.commit('LOGOUT');
                 this.$store.commit('CLEAR_STATE');
-                setTimeout(() => {
-                    this.$router.go('/')  
-                }, 1500)
                 })
             .catch(error => {
                 console.log(error)

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('../middleware/multer-config');
+const multer = require('../middlewares/multer-config');
 
 const feedControllers = require('../controllers/PostsList');
-const auth = require('../middleware/auth');
+const auth = require('../middlewares/auth');
 
 //Posts routes
 router.post('/post/',auth, multer, feedControllers.postMessage);

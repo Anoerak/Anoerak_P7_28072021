@@ -7,7 +7,7 @@ var cors = require('cors')
 app.use(cors())
 
 const userRoutes = require('./routes/user');
-// const postsListlRoutes = require('./routes/postsList');
+const postsListRoutes = require('./routes/PostsList');
 const userAccountRoutes = require('./routes/profil');
 // const adminboardRoutes = require('./routes/adminboard');
 
@@ -30,12 +30,12 @@ groupomaniaDb.connect(function(err){
 if(!err) {
     console.log("Vous êtes maintenany connectée à Groupomania Db");
 } else {
-    console.log("Erreur de connection, Base de Donnée injoignable.");
+    console.log("Erreur de connection, Base de Données injoignable.");
 }
 })
 
 app.use('/user/', userRoutes);
-// app.use('/postsList/', postsListRoutes);
+app.use('/postsList/', postsListRoutes);
 app.use('/profil/', userAccountRoutes);
 // app.use('/dashBoard/', adminboardRoutes);
 
