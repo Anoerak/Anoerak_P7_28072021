@@ -1,4 +1,6 @@
 const bdd = require('../mysqlConfig');
+const express = require('express');
+const route = express.Router();
 
 exports.postMessage = (req, res, next) => {
     let syntaxeMessage = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{2,100}$/;
@@ -57,9 +59,9 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 exports.getOnePost = (req, res, next) => {
-    const route = useRoute();
-    const ID = Number(route.params.id);
-    bdd.query('SELECT * FROM posts WHERE id ="'+ID+'" ORDER by DESC', (err, resultat) => {
+    let postId = Number(route.params.id)
+    console.log(postId);
+    bdd.query('SELECT * FROM posts WHERE id=12', (err, resultat) => {
         if(err) throw (err);
         return res.status(200).json({ resultat });
     })

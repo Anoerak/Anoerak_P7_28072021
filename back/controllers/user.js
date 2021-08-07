@@ -99,6 +99,7 @@ exports.login = (req, res) => {
 };
 
 exports.getInfos = (req, res, next) => {
+    console.log(req.params.id)
     bdd.query('SELECT * FROM users WHERE id="'+req.params.id+'"', (err, resultat) => {
         if(err) throw err; 
         console.log(resultat);

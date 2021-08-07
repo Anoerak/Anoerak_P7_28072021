@@ -73,7 +73,6 @@ import { mapState } from 'vuex'
 
 
 export default {
-  name: 'PostsList',
   data() {
     return {
         displayFormPost: false,
@@ -83,7 +82,6 @@ export default {
         isAlert: true,
         feedbackMessage: '',
         imgIsChecked: false, 
-        posts: [],
         img : {
             size: 0, 
             height: 0, 

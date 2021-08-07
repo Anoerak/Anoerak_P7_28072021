@@ -15,7 +15,8 @@ export default createStore({
         profilPictureS: '',
         privilegesS: '',
         isValid: 'test',
-        isLogged: false
+        isLogged: false,
+        authorId: ''
     }, 
     getters: {
         isLogged: (state) => {

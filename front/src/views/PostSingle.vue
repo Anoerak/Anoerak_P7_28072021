@@ -4,28 +4,26 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">
-            name
+            {{ postTitle }}
           </h1>
           <h2 class="subtitle ">
-            <strong>Date:</strong> {{  }}
+            <strong>Date:</strong> {{ moment(postDate).format('DD MM YYYY') }}
             <br>
-            <strong>Heure:</strong> time
+            <strong>Heure:</strong> {{ moment(postDate).format('hh:mm') }}
           </h2>
         </div>
       </div>
     </section>
     <section class="post-content">
       <div class="container">
-        <p class="is-size-4 description">description</p>
-        <p class="is-size-5"><strong>Division:</strong> division</p>
-        <p class="is-size-5"><strong>Catégorie:</strong> category</p>
-        <p class="is-size-5"><strong>Auteur:</strong> author</p>
+        <p class="is-size-4 description">{{ postMessage }}</p>
+        <p class="is-size-5"><strong>Division:</strong> {{ postDivision }}</p>
+        <p class="is-size-5"><strong>Catégorie:</strong> {{ postCategory}}</p>
+        <p class="is-size-5"><strong>Auteur:</strong> {{ postAuthorName}}</p>
         <div class="post-images columns is-multiline has-text-centered">
-          <!-- <div v-for="image in post.images" 
-                :key="image.id" 
-                class="column is-one-third">
-            <img :src="image" :alt="post.name"/>
-          </div> -->
+          <div class="column is-one-third">
+            <img :src="postImage" :alt="postTitle"/>
+          </div>
         </div>
       </div>
     </section>
@@ -49,14 +47,25 @@
 // import Commentaires from '../components/PostComments.vue' 
 import Comment from '../components/Comment.vue'
 import axios from 'axios'
-import { mapState } from 'vuex'
-import {useRoute} from 'vue-router'
- 
+import { mapState } from 'vuex' 
+import moment from 'moment'
 
 export default {
+  drop:['postAuthor'],
+    created: function () {
+      this.moment = moment;
+    },
   data() {
     return {
-      displayCommentEdit: false
+      displayCommentEdit: false,
+      postTitle: '',
+      postDate: '',
+      postMessage: '',
+      postDivision: '',
+      postCategory: '',
+      postAuthor: '',
+      postAuthorName: '',
+      postImage: ''
     }
   },
   components: {
@@ -65,9 +74,6 @@ export default {
   },
   methods: {
     displayOnePost(){
-      const route = useRoute();
-      let DI = Number(route.params.id)
-      console.log(DI)
         axios.get('http://localhost:3000/postsList/getOne/',
           { headers: {
             'Authorization': `token ${this.$store.state.tokenToCheck}`
@@ -75,68 +81,43 @@ export default {
             )
         .then(response => {
           console.log(response)
-            this.posts = response.data.resultat; 
+            this.postTitle = response.data.resultat[0].title;
+            this.postDate = response.data.resultat[0].date;
+            this.postMessage = response.data.resultat[0].message;
+            this.postDivision = response.data.resultat[0].division;
+            this.postCategory = response.data.resultat[0].category;
+            this.$store.state.authorId = response.data.resultat[0].authorId;
+            this.postImage = response.data.resultat[0].image;
         })
         .catch(error => {
             console.log(error.response.data)
         })
     },
-    checkImage() {
-        let imageToCheck = this.$refs.file.files[0];
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-
-        if(!imageToCheck || imageToCheck.type.indexOf('image/') !== 0) {
-            this.feedbackMessage = "Erreur dans le type de fichier";
-            this.isAlert = true; 
-            this.imgIsChecked = false;
-            return;
-        }
-
-        if(!allowedTypes.includes(imageToCheck.type)){
-            this.feedbackMessage = "Seules sont autorisées les images jpg, jpeg, png et gif"
-            this.isAlert = true; 
-            this.imgIsChecked = false; 
-            return;
-        }
-
-        this.img.size = imageToCheck.size / 1000;
-
-        if(this.img.size > 5000) {
-            this.feedbackMessage = "L'image transmise est trop lourde (5Mo max)";
-            this.isAlert = true; 
-            this.imgIsChecked = false;
-            return;
-        }
-
-        let fileReader = new FileReader(); 
-        fileReader.readAsDataURL(imageToCheck);
-        fileReader.onload = evt => {
-            let image = new Image();
-            image.onload = () => {
-                this.img.height = image.height;
-                this.img.width = image.width;
-                if(this.img.height > 600 || this.img.width > 600){
-                    this.feedbackMessage = "L'image doit être de taille 600x600 max";
-                    this.isAlert = true; 
-                    this.imgIsChecked = false;
-                    return;
+    getInfos(author) {
+      console.log(author)
+    axios.get('http://localhost:3000/user/getInfos/' + author, { 
+                headers: {
+                    'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }
-            }
-            image.src = evt.target.result;
-        }
-
-        this.imgIsChecked = true;
-        this.feedbackMessage = ''; 
-        this.isAlert = false;
-        this.img.url = URL.createObjectURL(imageToCheck);
-        return;
-    }
+            })
+    .then(result => {
+      console.log('author : '+ result)
+            this.postAuthorName = result.data[0].username;
+            this.postDivision = result.data[0].division;
+    })
+    .catch(error => {
+        console.log('author : '+error)
+    })
+},
   }, 
   mounted() {
       this.displayOnePost();
+      console.log(this.authorId)
+      this.getInfos();
   },
   beforeupdated() {
-      this.displayOnePost();
+      this.displayOnePost()
+      this.getInfos();
   },
   computed: {
     ...mapState([
@@ -150,7 +131,8 @@ export default {
             'profilPictureS',
             'privilegesS',
             'isValid',
-            'isLogged'
+            'isLogged',
+            'authorId'
     ]),
   }
 }
