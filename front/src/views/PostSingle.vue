@@ -1,5 +1,5 @@
 <template>
-  <div class="post-single">
+  <div class="post-single" v-if="isLogged">
     <section class="hero is-primary">
       <div class="hero-body">
         <div class="container">
@@ -32,11 +32,12 @@
         <button class="button is-info  is-pulled-right" @click.prevent="displayCommentEdit = !displayCommentEdit">Poster un commentaire</button>
           <h2 class="subtitle is-4">Vos commentaires</h2>
               <Comment v-if="displayCommentEdit"/>
-          <!-- <Commentaires 
-          v-for="comment in comments"
-          :comment="comment"
-          :key="comment.id"
-          /> -->
+                <Commentaires 
+                v-for="comment in comments"
+                :key="comment.id"
+                :message="comment.message"
+                :author="comment.authorName"
+                />
       </div>
     </section>
   </div>
@@ -44,14 +45,15 @@
 
 
 <script>
-// import Commentaires from '../components/PostComments.vue' 
+import Commentaires from '../components/PostComments.vue' 
 import Comment from '../components/Comment.vue'
 import axios from 'axios'
 import { mapState } from 'vuex' 
 import moment from 'moment'
+import  {useRoute} from 'vue-router'
 
 export default {
-  drop:['postAuthor'],
+
     created: function () {
       this.moment = moment;
     },
@@ -63,76 +65,117 @@ export default {
       postMessage: '',
       postDivision: '',
       postCategory: '',
-      postAuthor: '',
+      postAuthorId: '',
       postAuthorName: '',
-      postImage: ''
+      postImage: '',
+      postId: '',
+      comments: []
     }
   },
   components: {
-    // Commentaires,
+    Commentaires,
     Comment
   },
   methods: {
-    displayOnePost(){
-        axios.get('http://localhost:3000/postsList/getOne/',
+    displayOnePost(postId){
+        axios.get('http://localhost:3000/postsList/getOne/' +  postId,
           { headers: {
             'Authorization': `token ${this.$store.state.tokenToCheck}`
             }}
             )
         .then(response => {
-          console.log(response)
             this.postTitle = response.data.resultat[0].title;
             this.postDate = response.data.resultat[0].date;
             this.postMessage = response.data.resultat[0].message;
             this.postDivision = response.data.resultat[0].division;
             this.postCategory = response.data.resultat[0].category;
-            this.$store.state.authorId = response.data.resultat[0].authorId;
             this.postImage = response.data.resultat[0].image;
         })
         .catch(error => {
             console.log(error.response.data)
         })
     },
-    getInfos(author) {
-      console.log(author)
-    axios.get('http://localhost:3000/user/getInfos/' + author, { 
+    getInfos(postAuthorId) {
+    axios.get('http://localhost:3000/user/getInfos/' + postAuthorId, { 
                 headers: {
                     'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }
             })
     .then(result => {
-      console.log('author : '+ result)
             this.postAuthorName = result.data[0].username;
             this.postDivision = result.data[0].division;
     })
     .catch(error => {
         console.log('author : '+error)
     })
-},
-  }, 
+    },
+            getComments() {
+            axios.get('http://localhost:3000/postsList/get/comments/' + 2, { 
+                        headers: {
+                            'Authorization': `token ${this.$store.state.tokenToCheck}`
+                        }
+                    })
+            .then(response => {
+                console.log(response)
+                this.comments = response.data.resultat;
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        },
+        postComment(id) {
+            let syntaxe = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{1,}$/;
+            if(syntaxe.test(this.commentToPost)) {
+                let comment = {
+                    message: this.commentToPost,
+                    postId: id,
+                    authorName: this.$store.state.username,
+                    authorId: this.$store.state.userId
+                }
+                axios.post('http://localhost:3000/postsList/post/comment', comment , { 
+                        headers: {
+                            'Authorization': `token ${this.$store.state.tokenToCheck}`
+                        }
+                    })
+                .then(response => {
+                    this.feedbackMessage = response.data.message;
+                    this.isAlert = false; 
+                    this.comments.push(this.commentToPost);
+                    this.commentToPost = '';
+                    setTimeout(() => {
+                        this.feedbackMessage = ''
+                    }, 2000);
+                    this.getComments(id);
+                })
+                .catch(error => {
+                    this.feedbackMessage = error.response.data.message; 
+                    this.isAlert = true; 
+                })
+            } else {
+                this.errorMessage = "Le message ne respecte pas la syntaxe autorisée";
+                return;
+            }
+        }
+
+  },
   mounted() {
-      this.displayOnePost();
-      console.log(this.authorId)
-      this.getInfos();
+    const route = useRoute();
+    this.postId = route.params.id;
+    this.postAuthorId = route.params.authorId;
+    this.displayOnePost(this.postId),
+    this.getInfos(this.postAuthorId),
+    this.getComments()
   },
   beforeupdated() {
-      this.displayOnePost()
-      this.getInfos();
+    const route = useRoute();
+    this.postId = route.params.id;
+    this.postAuthorId = route.params.authorId;
+    this.displayOnePost(this.postId)
   },
   computed: {
     ...mapState([
-            'userId',
-            'lastnameS',
-            'firstnameS',
-            'usernameS',
-            'emailS',
-            'divisionS',
             'tokenToCheck',
-            'profilPictureS',
-            'privilegesS',
-            'isValid',
             'isLogged',
-            'authorId'
     ]),
   }
 }

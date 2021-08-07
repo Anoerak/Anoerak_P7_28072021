@@ -1,6 +1,6 @@
 <template>
   <div class="post-card">
-    <router-link :to="'/post/' + id">
+    <router-link :to="'/post/' + id +'/'+ authorId">
       <div class="card">
         <div class="card-content" :style="{ 'background-image': 'url(' + image + ')' }">
           <h2 class="has-text-weight-bold">{{ title }}</h2>
@@ -15,11 +15,11 @@
 
 
 <script>
-import axios from 'axios'
-import moment from 'moment'
+import axios from 'axios';
+import moment from 'moment';
 
 export default {
-    props: ['image', 'title', 'date', 'time', 'category', 'authorId', 'nbcomments', 'id'],
+    props: ['image', 'title', 'date', 'category', 'nbcomments', 'id', 'authorId'],
     created: function () {
       this.moment = moment;
     },
@@ -37,7 +37,6 @@ export default {
                         }
                     })
             .then(result => {
-              // console.log('author : '+ result.data[0].profilPicture)
                     this.authorName = result.data[0].username;
                     this.profilPictureAuthor = result.data[0].profilPicture;
             })
@@ -48,7 +47,6 @@ export default {
     }, 
     mounted() {
         this.getInfos(this.authorId);
-        // console.log('this author : '+this.authorId)
     },
 }
 </script>

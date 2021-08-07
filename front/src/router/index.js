@@ -50,7 +50,7 @@ export default createRouter({
       component: PostsList
     },
     {
-      path: '/post/:id',
+      path: '/post/:id/:authorId',
       name: 'postSingle',
       component: PostSingle
     },

@@ -11,7 +11,7 @@ router.post('/post/comment/', auth, postsListControllers.postComment);
 
 //Get routes
 router.get('/getAll/', auth, postsListControllers.getAllPosts);
-router.get('/getOne/', auth, postsListControllers.getOnePost);
-router.get('/comment/get/:id', auth, postsListControllers.getComments);
+router.get('/getOne/:id', auth, postsListControllers.getOnePost);
+router.get('/get/comments/:id', auth, postsListControllers.getComments);
 
 module.exports = router;

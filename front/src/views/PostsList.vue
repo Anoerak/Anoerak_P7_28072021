@@ -134,16 +134,7 @@ export default {
   },
   computed: {
     ...mapState([
-            'userId',
-            'lastnameS',
-            'firstnameS',
-            'usernameS',
-            'emailS',
-            'divisionS',
             'tokenToCheck',
-            'profilPictureS',
-            'privilegesS',
-            'isValid',
             'isLogged'
     ]),
   }

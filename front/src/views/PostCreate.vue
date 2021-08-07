@@ -1,5 +1,5 @@
 <template> 
-    <section class="hero2 is-success is-fullheight">
+    <section class="hero2 is-success is-fullheight" v-if="isLogged">
         <div class="hero-body">
             <div class="field">
                 <label class="label">Titre</label>
@@ -147,14 +147,14 @@ export default {
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
 
         if(!imageToCheck || imageToCheck.type.indexOf('image/') !== 0) {
-            this.feedbackMessage = "Erreur dans le type de fichier";
+            this.feedbackMessage = "Fichier non autorisé";
             this.isAlert = true; 
             this.imgIsChecked = false;
             return;
         }
 
         if(!allowedTypes.includes(imageToCheck.type)){
-            this.feedbackMessage = "Seules sont autorisées les images jpg, jpeg, png et gif"
+            this.feedbackMessage = "Veuillez choisir une image au format jpg, jpeg, png et gif"
             this.isAlert = true; 
             this.imgIsChecked = false; 
             return;
@@ -177,7 +177,7 @@ export default {
                 this.img.height = image.height;
                 this.img.width = image.width;
                 if(this.img.height > 600 || this.img.width > 600){
-                    this.feedbackMessage = "L'image doit être de taille 600x600 max";
+                    this.feedbackMessage = "Vérifier les dimensions de votre image (600x600 maximum)";
                     this.isAlert = true; 
                     this.imgIsChecked = false;
                     return;
@@ -196,15 +196,7 @@ export default {
   computed: {
     ...mapState([
             'userId',
-            'lastnameS',
-            'firstnameS',
-            'usernameS',
-            'emailS',
-            'divisionS',
             'tokenToCheck',
-            'profilPictureS',
-            'privilegesS',
-            'isValid',
             'isLogged'
     ])
   }

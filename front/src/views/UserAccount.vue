@@ -205,7 +205,7 @@ export default {
                     this.img.height = image.height;
                     this.img.width = image.width;
                     if(this.img.height > 300 || this.img.width > 300){
-                        this.feedbackMessageProfilPicture = "Vérifier les dimensions de votre image (300x300)";
+                        this.feedbackMessageProfilPicture = "Vérifier les dimensions de votre image (300x300 maximum)";
                         this.isAlert = true; 
                         this.imgIsChecked = false;
                         return;

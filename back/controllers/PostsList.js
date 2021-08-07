@@ -1,6 +1,4 @@
 const bdd = require('../mysqlConfig');
-const express = require('express');
-const route = express.Router();
 
 exports.postMessage = (req, res, next) => {
     let syntaxeMessage = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{2,100}$/;
@@ -59,16 +57,14 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 exports.getOnePost = (req, res, next) => {
-    let postId = Number(route.params.id)
-    console.log(postId);
-    bdd.query('SELECT * FROM posts WHERE id=12', (err, resultat) => {
+    bdd.query('SELECT * FROM posts WHERE id="'+req.params.id+'"', (err, resultat) => {
         if(err) throw (err);
         return res.status(200).json({ resultat });
     })
 };
 
 exports.getComments = (req,res,next) => {
-    bdd.query('SELECT comments.*, users.profilPicture FROM comments JOIN users ON comments.idAuteur = users.id AND comments.idPost="'+req.params.id+'" ORDER BY id DESC', (err, resultat) => {
+    bdd.query('SELECT comments.*, users.profilPicture FROM comments JOIN users ON comments.authorId = users.id AND comments.postId="'+req.params.id+'" ORDER BY id DESC', (err, resultat) => {
         if(err) throw err;
         console.log(resultat);
         return res.status(200).json({ resultat });

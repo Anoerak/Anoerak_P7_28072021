@@ -16,7 +16,7 @@ export default createStore({
         privilegesS: '',
         isValid: 'test',
         isLogged: false,
-        authorId: ''
+        postAuthorId: '',
     }, 
     getters: {
         isLogged: (state) => {
