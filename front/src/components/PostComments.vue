@@ -2,6 +2,7 @@
     <div v-if="isEven(index)" class="vif_pos" >
         <article id="message" class="message is-info">
                 <div class="message-header">
+                    <button class=" button is-danger" v-if="pirivileges != 'user'"><i class="far fa-trash-alt"></i></button>
                     <div class="header_container">
                         <div class="left">
                             <figure>

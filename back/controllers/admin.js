@@ -41,6 +41,31 @@ exports.getStatsFlagged = (req, res, err) => {
     })
 }
 
+exports.deleteAccount = (req,res,next) => {
+    bdd.query('SELECT password, profilPicture FROM users WHERE id="'+ req.body.userId +'"', (err, resultat) => {
+        if(err) throw err; 
+        then(valid => {
+            if(!valid){
+                if(!valid) return res.status(500).json({ message: "Mot de passe non valide"});
+            }
+            let profilPictureToDelete = resultat[0].profilPicture.split('/profils/')[1]
+            fs.unlink(`images/profils/${profilPictureToDelete}`, () => { 
+                bdd.query('DELETE FROM users WHERE id="'+ req.body.userId +'"',(err, result) => {
+                    if(err) throw err;
+                    bdd.query('DELETE FROM posts WHERE authorId="'+ req.body.userId +'"',(err, result) => { 
+                        if(err) throw err;
+                        bdd.query('DELETE FROM comments WHERE idAuteur="'+ req.body.userId +'"',(err, result) => { 
+                            if(err) throw err;
+                            return res.status(200).json({ message: 'Compte supprimé, redirection en cours.'});
+                        })
+                    })
+                })
+            })
+
+        })
+    })
+};
+
 exports.getFlaggedPosts = (req, res, next) => {
 
     bdd.query('SELECT * FROM posts WHERE isFlagged="1" ORDER BY id DESC ', (err, resultat) => {
@@ -74,3 +99,5 @@ exports.flagPost = (req,res,next) => {
             }
         })
 };
+
+

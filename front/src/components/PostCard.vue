@@ -1,6 +1,6 @@
 <template>
   <div class="post-card">
-    <router-link :to="'/post/' + id +'/'+ authorId">
+    <router-link class="link" :to="'/post/' + id +'/'+ authorId">
       <div class="card" :style="{'margin':'0.5rem'}">
         <div class="card-content" :style="{ 'background-image': 'url(' + image + ')' }">
           <h2 class="has-text-weight-bold">{{ title }}</h2>
@@ -120,5 +120,8 @@ export default {
     border-radius: 0 0 10px 0;
     bottom: 0;
     right: 0;
+  }
+  .link{
+    color: black;
   }
 </style>

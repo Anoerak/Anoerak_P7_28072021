@@ -12,6 +12,7 @@ import PostComment from '../components/PostComments.vue'
 
 import Admin from '../views/Admin'
 import AdminUsersList from '../components/usersList.vue'
+import AdminUsersListDelete from '../components/usersListDelete.vue'
 import AdminFlaggedPosts from '../components/flaggedPosts'
 
 
@@ -59,6 +60,10 @@ export default createRouter({
         {
           path:'/admin/usersList',
           component: AdminUsersList
+        },
+        {
+          path:'/admin/usersListDelete',
+          component: AdminUsersListDelete
         }
       ]
     },

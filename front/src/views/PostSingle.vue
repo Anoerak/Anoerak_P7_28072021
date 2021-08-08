@@ -32,6 +32,7 @@
       <div id="test">
         <button class="button is-info  is-pulled-right" @click.prevent="displayCommentEdit = !displayCommentEdit">Poster un commentaire</button>
           <h2 class="subtitle is-4">Vos commentaires</h2>
+          br
               <Comment v-if="displayCommentEdit"/>
                 <Commentaires 
                 v-for="(comment, commentIndex) in comments"
@@ -52,8 +53,8 @@
 
 
 <script>
-import Commentaires from '../components/PostComments.vue' 
 import Comment from '../components/Comment.vue'
+import Commentaires from '../components/PostComments.vue'
 import axios from 'axios'
 import { mapState } from 'vuex' 
 import moment from 'moment'

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content">
-            <div class="container">
+            <div class="container"><br>
             <h2> Liste des posts signalés </h2>
                 <div class="userPosts">
                     <Post @postFlagged="displayAllPosts()" 

@@ -49,7 +49,7 @@
                                     <li><a><router-link to='/admin/usersList'>Liste Utilisateurs</router-link></a></li>
                                     <li><a><router-link to='/admin/flaggedPosts'>Posts signalés</router-link></a></li>
                                     <li><a><router-link to='/admin/flaggedPosts'>Ajouter un compte</router-link></a></li>
-                                    <li><a><router-link to='/admin/flaggedPosts'>Supprimer un compte</router-link></a></li>
+                                    <li><a><router-link to='/admin/usersListDelete'>Supprimer un compte</router-link></a></li>
                                 </ul>
                             </li>
                         </ul>

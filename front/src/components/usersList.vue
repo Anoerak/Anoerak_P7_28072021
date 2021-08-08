@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div><br>
         <div class="columns is-centered">
             <div class="column is-8">
                 <div class="card events-card">
@@ -52,7 +52,7 @@ export default {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 this.usersList = response.data;
             })
             .catch(error => {
