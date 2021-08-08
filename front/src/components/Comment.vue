@@ -36,7 +36,7 @@ import useVuelidate from '@vuelidate/core';
 import { required, minLength, maxLength } from '@vuelidate/validators';
 
 export function validPost(post) {
-  let validPostPattern = new RegExp("^[a-z A-Z0-9-@é'(è!çà)€^%ù:.;?,+=]+(?:[-'\\s][a-zA-Z]+)*$");
+  let validPostPattern = new RegExp("^[a-z A-Z0-9-@éêûô'(è!çà)€^%ù:.;?,+=]+(?:[-'\\s][a-zA-Z]+)*$");
   if (validPostPattern.test(post)){
     return true;
   }
@@ -59,14 +59,14 @@ export default {
     },
     methods:{
         postComment() {
-            console.log(this.postId)
+            // console.log(this.postId)
             let comment = {
                 message: this.commentToPost,
                 postId: this.postId,
                 authorName: this.usernameS,
                 authorId: this.userId
             }
-            console.log(comment)
+            // console.log(comment)
             axios.post('http://localhost:3000/postsList/post/comment', comment , { 
                     headers: {
                         'Authorization': `token ${this.$store.state.tokenToCheck}`

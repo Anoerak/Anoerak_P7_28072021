@@ -92,14 +92,14 @@ export default {
             }}
             )
         .then(response => {
-          console.log(response)
+          // console.log(response)
             this.postTitle = response.data.resultat[0].title;
             this.postDate = response.data.resultat[0].date;
             this.postMessage = response.data.resultat[0].message;
             this.postCategory = response.data.resultat[0].category;
             this.postImage = response.data.resultat[0].image;
             this.$store.state.postId = response.data.resultat[0].id;
-            console.log(this.$store.state.postId)
+            // console.log(this.$store.state.postId)
         })
         .catch(error => {
             console.log(error.response.data)
@@ -126,7 +126,7 @@ export default {
                     }
                 })
         .then(response => {
-            console.log(response)
+            // console.log(response)
             this.comments = response.data.resultat;
         })
         .catch(error => {

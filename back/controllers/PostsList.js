@@ -38,10 +38,17 @@ exports.postComment = (req,res, next) => {
         bdd.query('INSERT INTO comments SET ?', dataComment, (err, resultat) => {
             if(err){
                 console.log(err);
-                res.status(201).json({ message: 'Erreur de transmission'});
+                res.status(501).json({ message: 'Erreur de transmission'});
                 throw err;
             }
             return res.status(201).json({ message: 'Merci pour votre message ! '});
+        })
+        bdd.query('UPDATE posts SET nbComments = nbComments +1 WHERE id="'+req.body.postId+'"', (err,res) =>{
+            if(err){
+                console.log(err);
+                res.status(501).json({message: 'Erreur mise à jour Nb Message'});
+                throw err;
+            }
         })
     }
     else {

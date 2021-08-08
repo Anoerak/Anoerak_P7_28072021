@@ -15,6 +15,7 @@
                         <select v-model="categoryToPost">
                             <option>Actualité</option>
                             <option>Animaux</option>
+                            <option>Divers</option>
                             <option>Film</option>
                             <option>Musique</option>
                             <option>People</option>
