@@ -1,9 +1,10 @@
 const bdd = require('../mysqlConfig');
 
 module.exports = (req, res, next) => {
-    bdd.query('SELECT role FROM users WHERE id="'+req.body.userId+'"', (err, resultat) => {
+    bdd.query('SELECT privileges FROM users WHERE id="'+req.body.userId+'"', (err, resultat) => {
         if(err) throw err;
-        if(resultat[0].role == "admin") {
+        console.log(resultat)
+        if(resultat[0].privileges == "admin") {
             next();
         }
         else {

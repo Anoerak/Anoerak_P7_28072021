@@ -1,15 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import login from '../views/Login.vue'
+import Login from '../views/Login.vue'
 import About from '../views/About.vue'
 import Register from '../views/Register.vue'
 import PostsList from '../views/PostsList.vue'
 import PostSingle from '../views/PostSingle.vue'
 import PostCreate from '../views/PostCreate.vue'
 import UserAccount from '../views/UserAccount.vue'
+import UserLog from '../views/UserLog.vue'
 import PostComment from '../components/PostComments.vue'
 
 import Admin from '../views/Admin'
+import AdminUsersList from '../components/usersList.vue'
+import AdminFlaggedPosts from '../components/flaggedPosts'
 
 
 
@@ -20,7 +23,7 @@ export default createRouter({
     {
       path: '/',
       name: 'Home',
-      component: login,
+      component: Login,
       title: 'Groupomania'
     },
     {
@@ -36,17 +39,32 @@ export default createRouter({
     },
     {
       path: '/userAccount',
-      name: 'UserAccount',
+      name: 'userAccount',
       component: UserAccount
     },
     {
-      path: '/admin',
-      name: 'Admin',
-      component: Admin
-    },
+      path:'/userLog/:id',
+      name: 'userLog',
+      component: UserLog
+    },  
     {
+      path:'/admin',
+      name: 'admin',
+      component: Admin,
+      children: [
+        {
+          path:'/admin/flaggedPosts',
+          component: AdminFlaggedPosts
+        },
+        {
+          path:'/admin/usersList',
+          component: AdminUsersList
+        }
+      ]
+    },
+      {
       path: '/postslist',
-      name: 'PostsList',
+      name: 'postsList',
       component: PostsList
     },
     {
