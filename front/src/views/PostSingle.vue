@@ -9,14 +9,15 @@
           <h2 class="subtitle ">
             <strong>Date:</strong> {{ moment(postDate).format('DD MM YYYY') }}
             <br>
-            <strong>Heure:</strong> {{ moment(postDate).format('hh:mm') }}
+            <strong>Heure:</strong> {{ moment(postDate).format('HH:mm') }}
           </h2>
         </div>
       </div>
     </section>
-    <section class="post-content">
+    <section class="post-content" :style="{'margin':'1rem'}">
       <div class="container">
         <p class="is-size-4 description">{{ postMessage }}</p>
+        <br>
         <p class="is-size-5"><strong>Division:</strong> {{ postDivision }}</p>
         <p class="is-size-5"><strong>Catégorie:</strong> {{ postCategory}}</p>
         <p class="is-size-5"><strong>Auteur:</strong> {{ postAuthorName}}</p>
@@ -33,10 +34,16 @@
           <h2 class="subtitle is-4">Vos commentaires</h2>
               <Comment v-if="displayCommentEdit"/>
                 <Commentaires 
-                v-for="comment in comments"
+                v-for="(comment, commentIndex) in comments"
                 :key="comment.id"
                 :message="comment.message"
+                :division="comment.division"
+                :privileges="comment.privileges"
+                :date="comment.date"
                 :author="comment.authorName"
+                :profilPicture="comment.profilPicture"
+                :postId="comment.postId"
+                :index="commentIndex"
                 />
       </div>
     </section>
@@ -69,7 +76,8 @@ export default {
       postAuthorName: '',
       postImage: '',
       postId: '',
-      comments: []
+      comments: [],
+      commentToPost:'',
     }
   },
   components: {
@@ -84,12 +92,14 @@ export default {
             }}
             )
         .then(response => {
+          console.log(response)
             this.postTitle = response.data.resultat[0].title;
             this.postDate = response.data.resultat[0].date;
             this.postMessage = response.data.resultat[0].message;
-            this.postDivision = response.data.resultat[0].division;
             this.postCategory = response.data.resultat[0].category;
             this.postImage = response.data.resultat[0].image;
+            this.$store.state.postId = response.data.resultat[0].id;
+            console.log(this.$store.state.postId)
         })
         .catch(error => {
             console.log(error.response.data)
@@ -109,54 +119,20 @@ export default {
         console.log('author : '+error)
     })
     },
-            getComments() {
-            axios.get('http://localhost:3000/postsList/get/comments/' + 2, { 
-                        headers: {
-                            'Authorization': `token ${this.$store.state.tokenToCheck}`
-                        }
-                    })
-            .then(response => {
-                console.log(response)
-                this.comments = response.data.resultat;
-            })
-            .catch(error => {
-                console.log(error);
-            })
-        },
-        postComment(id) {
-            let syntaxe = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{1,}$/;
-            if(syntaxe.test(this.commentToPost)) {
-                let comment = {
-                    message: this.commentToPost,
-                    postId: id,
-                    authorName: this.$store.state.username,
-                    authorId: this.$store.state.userId
-                }
-                axios.post('http://localhost:3000/postsList/post/comment', comment , { 
-                        headers: {
-                            'Authorization': `token ${this.$store.state.tokenToCheck}`
-                        }
-                    })
-                .then(response => {
-                    this.feedbackMessage = response.data.message;
-                    this.isAlert = false; 
-                    this.comments.push(this.commentToPost);
-                    this.commentToPost = '';
-                    setTimeout(() => {
-                        this.feedbackMessage = ''
-                    }, 2000);
-                    this.getComments(id);
+    getComments(postId) {
+        axios.get('http://localhost:3000/postsList/get/comments/' + postId, { 
+                    headers: {
+                        'Authorization': `token ${this.$store.state.tokenToCheck}`
+                    }
                 })
-                .catch(error => {
-                    this.feedbackMessage = error.response.data.message; 
-                    this.isAlert = true; 
-                })
-            } else {
-                this.errorMessage = "Le message ne respecte pas la syntaxe autorisée";
-                return;
-            }
-        }
-
+        .then(response => {
+            console.log(response)
+            this.comments = response.data.resultat;
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    },
   },
   mounted() {
     const route = useRoute();
@@ -164,7 +140,7 @@ export default {
     this.postAuthorId = route.params.authorId;
     this.displayOnePost(this.postId),
     this.getInfos(this.postAuthorId),
-    this.getComments()
+    this.getComments(this.postId)
   },
   beforeupdated() {
     const route = useRoute();
@@ -195,12 +171,4 @@ export default {
   .button{
     margin-right: 1rem;
   }
-
-
-  .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
 </style>

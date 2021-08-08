@@ -1,84 +1,80 @@
 <template>
-    <article class="message">
-            <div class="message-header">
-                <p>{{ comment.authorName }} le {{ moment(comment.date).format('DD.MM.YYYY') }} à {{ moment(comment.date).format('hh:mm:ss') }}</p>
-                <p>{{ comment.division}}</p>
-            </div>
-            <div class="message-body">
-                {{ comment.message }}
-            </div>
-    </article>
+    <div v-if="isEven(index)" class="vif_pos" >
+        <article id="message" class="message is-info">
+                <div class="message-header">
+                    <div class="header_container">
+                        <div class="left">
+                            <figure>
+                                <img :src="profilPicture" alt="profil_picture" class="profilPicture">
+                                <figcaption v-if="privileges != 'user'">{{ privileges }}</figcaption>
+                            </figure>
+                            <p>{{ author }} le {{ moment(date).format('DD.MM.YYYY') }} à {{ moment(date).format('HH:mm:ss') }}</p>
+                        </div>
+                        <div class="white_space"></div>
+                    </div>
+                    <br>
+                    <div class="header_secondary_container">
+                        <div class="white_space"></div>
+                        <p>{{ division}}</p>
+                </div>
+                </div>
+                <div class="message-body">
+                    {{ message }}
+                </div>
+        </article>
+    </div>
+    <div v-else class="v_else" :style="{'justify-content':'flex-end'}">
+        <article id="message" class="message is-info">
+                <div class="message-header" :style="{'background-color':'rgba(89, 150, 231, 0.75)'}">
+                    <div class="header_container">
+                        <div class="left">
+                            <figure>
+                                <img :src="profilPicture" alt="profil_picture" class="profilPicture">
+                                <figcaption v-if="privileges != 'user'">{{ privileges }}</figcaption>
+                            </figure>
+                            <p>{{ author }} le {{ moment(date).format('DD.MM.YYYY') }} à {{ moment(date).format('HH:mm:ss') }}</p>
+                        </div>
+                        <div class="white_space"></div>
+                    </div>
+                    <div class="header_secondary_container">
+                        <div class="white_space"></div>
+                        <p>{{ division}}</p>
+                    </div>
+                </div>
+                <div class="message-body">
+                    {{ message }}
+                </div>
+        </article>
+    </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-// import axios from 'axios';
 import moment from 'moment';
 
 export default {
-    props: ['authorName', 'message', 'id', 'postId', 'authorId', 'date'], 
+    props: ['message', 'date', 'author', 'division', 'profilPicture', 'index', "privileges"], 
     created: function () {
       this.moment = moment;
     },
     data() {
         return {
-            authorProfilePicture: '',
             isAlert: true,
             feedbackMessage: '',
             comments: [],
-            division:'',
-            messages:''
+            img:{
+                url:''
+            }
         }
     },
-    // methods:{
-    //     getComments() {
-    //         axios.get('http://localhost:3000/postsList/get/comments/' , { 
-    //                     headers: {
-    //                         'Authorization': `token ${this.$store.state.tokenToCheck}`
-    //                     }
-    //                 })
-    //         .then(response => {
-    //             console.log(response)
-    //             this.comments = response.data.resultat;
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         })
-    //     },
-    //     postComment(id) {
-    //         let syntaxe = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{1,}$/;
-    //         if(syntaxe.test(this.commentToPost)) {
-    //             let comment = {
-    //                 message: this.commentToPost,
-    //                 postId: id,
-    //                 authorName: this.$store.state.username,
-    //                 authorId: this.$store.state.userId
-    //             }
-    //             axios.post('http://localhost:3000/postsList/post/comment', comment , { 
-    //                     headers: {
-    //                         'Authorization': `token ${this.$store.state.tokenToCheck}`
-    //                     }
-    //                 })
-    //             .then(response => {
-    //                 this.feedbackMessage = response.data.message;
-    //                 this.isAlert = false; 
-    //                 this.comments.push(this.commentToPost);
-    //                 this.commentToPost = '';
-    //                 setTimeout(() => {
-    //                     this.feedbackMessage = ''
-    //                 }, 2000);
-    //                 this.getComments(id);
-    //             })
-    //             .catch(error => {
-    //                 this.feedbackMessage = error.response.data.message; 
-    //                 this.isAlert = true; 
-    //             })
-    //         } else {
-    //             this.errorMessage = "Le message ne respecte pas la syntaxe autorisée";
-    //             return;
-    //         }
-    //     }
-    // },
+    methods:{
+        isEven(n) {
+            return n % 2 == 0;
+            },
+        isOdd(n) {
+        return Math.abs(n % 2) == 1;
+        }
+    },
     computed: {
     ...mapState([
             'tokenToCheck',
@@ -86,12 +82,66 @@ export default {
             'isLogged'
         ]),
     },
-    mounted(){
-        this.getComments()
-    }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    div.vif_pos,.v_else{
+        display: flex;
+        justify-content: flex-start;
+        margin: 1.5rem;
+        & article#message{
+            width: fit-content;
+            min-width: 300px;
+            // color: rgba(89, 210, 231, 0.75);
+            & .message-header{
+                background-color: rgba(89, 226, 231, 0.75);
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                line-height: 0.5;
+                & .header_container{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: flex-start;
+                    width: 100%;
+                    & .left{
+                        display: flex;
+                        align-items: center;
+                        & figure{
+                            display: flex;
+                            flex-direction: column;
+                            & .profilPicture{
+                                width: 40px;
+                                margin-right: 1rem;
+                                margin-bottom: 0.5rem;
+                                border-radius: 100vw;
+                            }
+                            & figcaption{
+                                text-align: center;
+                                margin-right: 1rem;
+                            }
+                        }
+                        & .white_space{
+                            display: flex;
+                        }
+                    }
+                }
+                & .header_secondary_container{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-end;
+                    justify-content: flex-end;
+                    width: 100%;
+                    & .white_space{
+                        display: flex;
+                    }
+                    & p{
+                        display: flex;
+                    }
+                }
+            }
+        }
+    }
 </style>

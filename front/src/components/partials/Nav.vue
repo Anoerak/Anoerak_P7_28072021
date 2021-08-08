@@ -27,12 +27,12 @@
           <router-link to="/admin" class="navbar-item" v-if="privilegesS == 'admin'">Admin</router-link>
         </a>
       </div>
-      <div class="button-block2" >
+      <!-- <div class="button-block2" >
         <router-link class="button-block2" :to="'/userAccount'" v-if="isLogged == true">
           <button class="button is-xl is-dark" :style="{ 'background-image': 'url(' + profilPictureS + ')' }" ></button>
           <p>Profil</p>
         </router-link>
-      </div>
+      </div> -->
     </div>
 
   </nav>

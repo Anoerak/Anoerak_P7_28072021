@@ -1,7 +1,7 @@
 <template>
   <div class="post-card">
     <router-link :to="'/post/' + id +'/'+ authorId">
-      <div class="card">
+      <div class="card" :style="{'margin':'0.5rem'}">
         <div class="card-content" :style="{ 'background-image': 'url(' + image + ')' }">
           <h2 class="has-text-weight-bold">{{ title }}</h2>
                 <span class="tag is-danger" v-if="nbcomments >0">{{ nbcomments }}</span>
@@ -38,7 +38,6 @@ export default {
                     })
             .then(result => {
                     this.authorName = result.data[0].username;
-                    this.profilPictureAuthor = result.data[0].profilPicture;
             })
             .catch(error => {
                 console.log('author : '+error)

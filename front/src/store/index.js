@@ -17,6 +17,7 @@ export default createStore({
         isValid: 'test',
         isLogged: false,
         postAuthorId: '',
+        postId: ''
     }, 
     getters: {
         isLogged: (state) => {

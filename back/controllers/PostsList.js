@@ -1,7 +1,7 @@
 const bdd = require('../mysqlConfig');
 
 exports.postMessage = (req, res, next) => {
-    let syntaxeMessage = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{2,100}$/;
+    let syntaxeMessage = /[a-zA-Z0-9 _@ê'(èÉÈÀÊÙ!çà)€^%ù:.;?,+=]{2,250}$/;
     if(syntaxeMessage.test(req.body.message) && req.file != null) {
         let dataPost = {
             authorId: req.body.authorId,
@@ -13,39 +13,39 @@ exports.postMessage = (req, res, next) => {
         bdd.query('INSERT INTO posts SET ?', dataPost,  (err, resultat) => {
             if(err) {
                 console.log(err); 
-                res.status(501).json({ message: 'Erreur dans le post '});
+                res.status(501).json({ message: 'Erreur de transmission'});
                 throw err; 
             }
-            return res.status(201).json({ message: 'Post effectué ! '});
+            return res.status(201).json({ message: 'Merci pour votre Post! '});
         })
     }
     else {
-        return res.status(501).json({ message: 'Erreur dans les données transmises '});
+        return res.status(501).json({ message: 'Erreur de validation (syntaxe serveur).'});
     }
 
 
 };
 
 exports.postComment = (req,res, next) => {
-    let syntaxeMessage = /[a-zA-Z0-9 _.,!?€'’(Ééèàû)&]{2,100}$/;
+    let syntaxeMessage = /[a-zA-Z0-9 _@ê'(èÉÈÀÊÙ!çà)€^%ù:.;?,+=]{2,250}$/;
     if(syntaxeMessage.test(req.body.message)) {
         let dataComment = {
-            idPost: req.body.postId,
-            auteur: req.body.auteur, 
+            authorName: req.body.authorName, 
             message: req.body.message,
-            idAuteur: req.body.idAuteur
+            authorId: req.body.authorId,
+            postId: req.body.postId
         }
         bdd.query('INSERT INTO comments SET ?', dataComment, (err, resultat) => {
             if(err){
                 console.log(err);
-                res.status(201).json({ message: 'Erreur dans les données transmises'});
+                res.status(201).json({ message: 'Erreur de transmission'});
                 throw err;
             }
-            return res.status(201).json({ message: 'Réponse postée ! '});
+            return res.status(201).json({ message: 'Merci pour votre message ! '});
         })
     }
     else {
-        return res.status(501).json({ message: 'Erreur dans la syntaxe message' });
+        return res.status(501).json({ message: 'Erreur de validation (syntaxe serveur).' });
     }
 };
 
@@ -64,7 +64,7 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.getComments = (req,res,next) => {
-    bdd.query('SELECT comments.*, users.profilPicture FROM comments JOIN users ON comments.authorId = users.id AND comments.postId="'+req.params.id+'" ORDER BY id DESC', (err, resultat) => {
+    bdd.query('SELECT comments.*, users.profilPicture, users.division, users.privileges FROM comments JOIN users ON comments.authorId = users.id AND comments.postId="'+req.params.id+'" ORDER BY date ASC', (err, resultat) => {
         if(err) throw err;
         console.log(resultat);
         return res.status(200).json({ resultat });
