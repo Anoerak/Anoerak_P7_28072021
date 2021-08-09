@@ -23,7 +23,7 @@ const errorHandler = error => {
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + "Accès administrateur uniquement");
+      console.error(bind + "Accès administrateur uniquement.");
       process.exit(1);
       break;
     case 'EADDRINUSE':
@@ -41,7 +41,7 @@ server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log("Le serveur est en cours d'utilisation sur le " + bind);
+  console.log("Le serveur est en cours d'utilisation sur le " + bind+".");
 });
 
 server.listen(port);

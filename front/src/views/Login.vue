@@ -33,14 +33,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="field">
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                        Se Souvenir de moi
-                                </label>
-                            </div>
+                            <br>
                             <button class="button is-block is-info is-large is-fullwidth" :disabled="v$.$invalid" @click.prevent="login">Connexion <i class="fa fa-sign-in" aria-hidden="true"></i></button> <br>
-                            <button class="button is-block is-primary is-normal is-fullwidth"  @click="$router.push('/Register')">S'enregistrer</button>
+                            <button class="button is-block is-primary is-normal is-fullwidth"  @click="$router.push('/Register')"> S'enregistrer <i class="fas fa-user-plus"></i></button>
                         </form>
                     </div>
                     <p class="has-text-grey">
@@ -115,7 +110,9 @@ export default {
     tokenToCheck() {
       return this.$store.state.tokenToCheck;
     },
-    ...mapState(['usernameS'])
+    ...mapState([
+        'usernameS'
+    ])
   },
   methods: {
     login() {
@@ -156,14 +153,14 @@ export default {
           minLength: minLength(2),
           name_validation: {
               $validator: validUsername,
-              $message: 'Pseudo invalide. Caractères spéciaux interdits'
+              $message: 'Pseudo invalide. Caractères spéciaux interdits.'
             } 
         },
         password: {
           required,
           password_validation: {
               $validator: validPassword,
-              $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial'
+              $message: 'Votre mot de passe doit contenir au moins 6 caractères dont \n 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.'
           } 
         }
     }

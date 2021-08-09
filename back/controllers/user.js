@@ -34,8 +34,8 @@ exports.signup = (req, res, next) => {
 // Enregistrement des données
             user.email = encodedString;
             user.password = hash; 
-            console.log('email is :'+user.email)
-            console.log('paswword is :'+user.password)
+            // console.log('email is :'+user.email)
+            // console.log('paswword is :'+user.password)
 // Vérification existence email ou username
             bdd.query('SELECT * from users WHERE username="'+user.username+'" OR email="'+user.email+'"', (err, result) => { 
                 if(err) throw err; 
@@ -53,7 +53,7 @@ exports.signup = (req, res, next) => {
         })
     }
     else {
-        return res.status(500).json({ message: 'Merci de vérifier les champs saisies'});
+        return res.status(500).json({ message: 'Merci de vérifier les champs saisies.'});
     }
 };
 
@@ -70,10 +70,10 @@ exports.login = (req, res) => {
         bdd.query('SELECT password, id FROM users WHERE username="'+user.username+'"', (err, result) => { 
             if(err) throw err; 
             if(result.length <= 0) {
-                return res.status(500).json({ message: "Utilisateur inconnu"});
+                return res.status(500).json({ message: "Utilisateur inconnu."});
             } else {
-                console.log(user.password); 
-                console.log(result[0]);
+                // console.log(user.password); 
+                // console.log(result[0]);
                 bcrypt.compare(user.password, result[0].password)
                 .then(valid => {
                     if(!valid) return res.status(500).json({ message: "Vérifier le mot de passe saisie."});
@@ -88,29 +88,28 @@ exports.login = (req, res) => {
                         });
                     })
                 .catch(() => {
-                    return res.status(500).json({ message: "Erreur de connexion"});
+                    return res.status(500).json({ message: "Erreur de connexion."});
                 })
             }
         })
     }
     else {
-        return res.status(500).json({ message: 'Merci de vérifer les données saises'});
+        return res.status(500).json({ message: 'Merci de vérifer les données saises.'});
     }
 };
 
 exports.getInfos = (req, res, next) => {
-    console.log(req.params.id)
+    // console.log(req.params.id)
     bdd.query('SELECT * FROM users WHERE id="'+req.params.id+'"', (err, resultat) => {
         if(err) throw err; 
-        console.log(resultat);
+        // console.log(resultat);
         return res.status(200).json(resultat);
     })
 };
 
 exports.getAllPosts = (req, res, next) => {
     let IdParsed = parseInt(req.params.id, 10)
-    console.log(IdParsed);
-
+    // console.log(IdParsed);
     bdd.query('SELECT * FROM posts WHERE authorId="'+IdParsed+'" ORDER BY id DESC', (err, resultat) => {
         if(err) throw err; 
         return res.status(200).json(resultat);
@@ -128,12 +127,12 @@ exports.flagPost = (req,res,next) => {
     if(req.body.isFlagged == 0) {
         bdd.query('UPDATE posts SET isFlagged="1" WHERE id="'+req.body.idToFlag+'"', (err, result) => {
             if(err) {
-                return res.status(500).json({message: 'Erreur dans le traitement de votre demande'});
+                return res.status(500).json({message: 'Erreur dans le traitement de votre demande.'});
             }
-            return res.status(200).json({ message: "Ce post vient d'être signalé à l'administateur"});
+            return res.status(200).json({ message: "Ce post vient d'être signalé à l'administateur."});
         }
     )
     }else{
-        return res.status(500).json({message: "Ce post à déjà fait l'objet d'un signalement"});
+        return res.status(500).json({message: "Ce post à déjà fait l'objet d'un signalement."});
     }
 }

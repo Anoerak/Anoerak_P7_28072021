@@ -21,14 +21,14 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(express.static('./images/'));
+app.use(express.static('./imgs/'));
 
 app.use(bodyParser.json())
 
 //Connexion à la Base de donnée Groupomaniadb
 groupomaniaDb.connect(function(err){
 if(!err) {
-    console.log("Vous êtes maintenany connectée à Groupomania Db");
+    console.log("Vous êtes maintenant connecté à Groupomania Db.");
 } else {
     console.log("Erreur de connection, Base de Données injoignable.");
 }

@@ -31,7 +31,7 @@
                             <div class="column is-three-fifths">
                                 <div class="field">
                                     <div class="control">
-                                        <span class="input is-normal" type="text" > {{ firstnameS }} </span>                                       
+                                        <span class="input is-normal" type="text" > {{ firstnameS }} </span>
                                     </div>
                                 </div>
                             </div>
@@ -153,14 +153,14 @@ export default {
             required,
             password_validation: {
                 $validator: validPassword,
-                $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial'
+                $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.'
                 } 
             },
             newPassword: {
             required,
             password_validation: {
                 $validator: validPassword,
-                $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial'
+                $message: 'Votre mot de passe doit contenir au moins 6 caractères dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.'
                 } 
             },
             confirmNewPassword: {
@@ -307,11 +307,9 @@ export default {
                 'lastnameS',
                 'firstnameS',
                 'usernameS',
-                'emailS',
                 'divisionS',
                 'tokenToCheck',
                 'profilPictureS',
-                'privilegesS',
                 'isValid',
                 'isLogged'
         ])

@@ -4,7 +4,7 @@
       <div class="card" :style="{'margin':'0.5rem'}">
         <div class="card-content" :style="{ 'background-image': 'url(' + image + ')' }">
           <h2 class="has-text-weight-bold">{{ title }}</h2>
-                <span class="tag is-danger" v-if="nbcomments >0">{{ nbcomments }}</span>
+                <span class="tag is-danger" v-if="nbcomments >0">{{ comments.length }}</span>
           <span class="category">{{ category }}</span>
         </div>
       </div>
@@ -26,7 +26,7 @@ export default {
     data() {
         return {
             authorName: '',
-            feedbackMessage: '',
+            comments:[],
         }
     },
     methods : {
@@ -43,9 +43,25 @@ export default {
                 console.log('author : '+error)
             })
         },
+        getCommentsSum() {
+            axios.get('http://localhost:3000/postsList/get/comments/' + this.id, { 
+                        headers: {
+                            'Authorization': `token ${this.$store.state.tokenToCheck}`
+                        }
+                    })
+            .then(response => {
+                // console.log(response)
+                this.comments = response.data.resultat;
+                // console.log(this.comments)
+            })
+        .catch(error => {
+            console.log(error);
+        })
+      },
     }, 
     mounted() {
         this.getInfos(this.authorId);
+        this.getCommentsSum()
     },
 }
 </script>

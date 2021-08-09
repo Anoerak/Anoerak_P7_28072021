@@ -7,17 +7,17 @@ exports.updateProfilPicture = (req, res, next) => {
     let profilPictureToUpload = `${req.protocol}://${req.get('host')}/profils/${req.file.filename}`
     let profilPictureToDelete = req.body.profilPicture.split('/profils/')[1];
 
-    console.log(profilPictureToDelete);
+    // console.log(profilPictureToDelete);
 
     if(profilPictureToDelete != "defaultUser.png") { 
 // Pas de suppression de fichier si l'utilisateur a encore l'image de base
-        fs.unlink(`images/profils/${profilPictureToDelete}`, () => { 
+        fs.unlink(`imgs/profils/${profilPictureToDelete}`, () => { 
         })
     }
     
     bdd.query('UPDATE users SET profilPicture="'+ profilPictureToUpload +'" WHERE id="'+ req.body.userId +'"', (err, result) => {
         if(err) throw err;
-        return res.status(201).json({ message: 'Image de profil modifiée avec succès !! '})
+        return res.status(201).json({ message: 'Image de profil modifiée avec succès !!'})
     })
 };
 
@@ -30,7 +30,7 @@ exports.updatePassword = (req, res, next) => {
                 bcrypt.compare(req.body.currentPassword, resultat[0].password)
                 .then(valid => {
                     if(!valid){
-                        if(!valid) return res.status(500).json({ message: "Ce mot de passe ne correspond pas à ce compte"});
+                        if(!valid) return res.status(500).json({ message: "Ce mot de passe ne correspond pas à ce compte."});
                     }
                     bcrypt.hash(req.body.newPassword, 10)
                         .then(hash => {
@@ -59,7 +59,7 @@ exports.deleteAccount = (req,res,next) => {
                     if(!valid) return res.status(500).json({ message: "Ce mot de passe ne correspond pas à l'utilisateur."});
                 }
                 let profilPictureToDelete = resultat[0].profilPicture.split('/profils/')[1]
-                fs.unlink(`images/profils/${profilPictureToDelete}`, () => { 
+                fs.unlink(`imgs/profils/${profilPictureToDelete}`, () => { 
                     bdd.query('DELETE FROM users WHERE id="'+ req.body.userId +'"',(err, result) => {
                         if(err) throw err;
                         bdd.query('DELETE FROM posts WHERE authorId="'+ req.body.userId +'"',(err, result) => { 

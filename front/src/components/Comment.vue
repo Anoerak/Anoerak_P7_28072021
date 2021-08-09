@@ -10,14 +10,15 @@
         <form class="media-content">
             <div class="field">
             <p class="control">
-                <input class="textarea" placeholder="Ajoutez votre commentaire..."  v-model="v$.commentToPost.$model"/>
+                <textarea class="textarea is-info" rows="5" placeholder="Ajoutez votre commentaire..."  v-model="v$.commentToPost.$model"/>
             </p>
+            <div v-if="commentToPost.length > 0" id="emailHelp" class="has-text-grey-lighter" >{{ commentToPost.length }} / 250</div>
             </div>
             <div class="level">
                 <div class="level-left">
                     <div class="level-item">
-                        <div class="input-errors" v-for="(error, index) of v$.commentToPost.$errors" :key="index">
-                        <div class="help is-danger">{{ error.$message }}</div></div>
+                        <div class="help is-danger is-light" v-for="(error, index) of v$.commentToPost.$errors" :key="index">
+                        <div class="help is-danger is-light">{{ error.$message }}</div></div>
                     </div>
                     <button class="button is-primary" :disabled="v$.$invalid" @click.prevent="postComment(postIds)">Valider</button>
                 </div>
@@ -36,11 +37,11 @@ import useVuelidate from '@vuelidate/core';
 import { required, minLength, maxLength } from '@vuelidate/validators';
 
 export function validPost(post) {
-  let validPostPattern = new RegExp("^[a-z A-Z0-9-@éêûô'(è!çà)€^%ù:.;?,+=]+(?:[-'\\s][a-zA-Z]+)*$");
-  if (validPostPattern.test(post)){
-    return true;
-  }
-  return false;
+let validPostPattern = new RegExp("^[a-z A-Z0-9-(è!çà@éêûô'€^%ù:.;?,+=)\\r\\n]+(?:[-'\\s][a-zA-Z]+)*$");
+if (validPostPattern.test(post)){
+        return true;
+    }
+    return false;
 }
 
 export default {
@@ -48,9 +49,6 @@ export default {
     data() {
         return {
             v$: useVuelidate(),
-            Auteur: '',
-            avatarAuteur: '',
-            displayPostComments: [],
             commentToPost: '',
             isAlert: true,
             feedbackMessage: '',
@@ -107,7 +105,7 @@ export default {
             maxLength: maxLength(250),
             comment_validation: {
                 $validator: validPost,
-                $message: "Post invalide."+
+                $message:
                 "\n Utiliser uniquement des lettres et les caractères spéciaux suivants :" + 
                 "\n -@é'(è!çà)€^%ù:.;?,+="
                 } 

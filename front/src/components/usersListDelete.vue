@@ -21,6 +21,7 @@
                                         :lastname="user.lastname"
                                         :division="user.division" >
                                         <div class="user_container">
+                                            <td width="5%"><i class="far fa-user"></i></td>
                                             <td>Nom: <strong>{{ user.lastname }}</strong> , Prénom: <strong>{{ user.firstname}}</strong></td>
                                             <td class="level-right">                                            
                                             <router-link :to="'/admin/userDelete/' + user.id "><button class="button is-small is-danger is-light" >Supprimer le compte</button></router-link>                                            
@@ -39,7 +40,6 @@
 
 <script>
 import axios from 'axios'
-
 
 export default {
     data() {
@@ -94,7 +94,8 @@ export default {
 .tr_container{
     & .user_container{
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
         border: 1px solid #dbdbdb;
         border-width: 0 0 1px;
         & td{

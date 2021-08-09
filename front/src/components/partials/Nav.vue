@@ -1,6 +1,5 @@
 <template>
   <nav class="navbar container" role="navigation" aria-label="main navigation">
-
     <div class="navbar-brand">
       <a>
         <router-link class="navbar-item" to="/">
@@ -14,27 +13,25 @@
         <span aria-hidden="true"></span>
       </a>
     </div>
-
     <div id='nav-menu' class="navbar-menu" v-bind:class="{ 'is-active' : showNav }">
       <div class="navbar-start">
         <a class="navbar-item">
           <router-link to="/postsList" class="navbar-item" v-if="isLogged == true">Acceuil</router-link>
         </a>
         <a class="navbar-item">
-          <router-link to="/about" class="navbar-item">About</router-link>
+          <router-link to="/about" class="navbar-item">À Propos</router-link>
         </a>
         <a class="navbar-item">
           <router-link to="/admin" class="navbar-item" v-if="privilegesS == 'admin'">Admin</router-link>
         </a>
       </div>
-      <!-- <div class="button-block2" >
+      <div class="button-block2" >
         <router-link class="button-block2" :to="'/userAccount'" v-if="isLogged == true">
-          <button class="button is-xl is-dark" :style="{ 'background-image': 'url(' + profilPictureS + ')' }" ></button>
+          <button id="profilPicture" class="button is-xl is-dark" :style="{ 'background-image': 'url(' + profilPictureS + ')' }" ></button>
           <p>Profil</p>
         </router-link>
-      </div> -->
+      </div>
     </div>
-
   </nav>
 </template>
 
@@ -61,12 +58,6 @@ export default {
       return this.$store.state.tokenToCheck;
     },
     ...mapState([
-        'userId',
-        'lastnameS',
-        'firstnameS',
-        'usernameS',
-        'emailS',
-        'divisionS',
         'tokenToCheck',
         'profilPictureS',
         'privilegesS',
@@ -82,6 +73,7 @@ export default {
   nav {
     margin-top: 25px;
     margin-bottom: 30px;
+    align-items: center;
     a {
       font-weight: bold;
       color: #2c3e50;
@@ -92,7 +84,7 @@ export default {
         color: #FD2D00;
       }
     }
-    & #navbar {
+    & #nav-menu {
       & .button-block2{
         display: flex;
         flex-direction: column;

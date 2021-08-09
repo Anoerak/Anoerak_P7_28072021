@@ -7,25 +7,22 @@
                         <p class="card-header-title">
                             Listes Utilisateurs
                         </p>
-                        <a href="#" class="card-header-icon" aria-label="more options">
-                            <span class="icon">
-                                <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </a>
                     </header>
                     <div class="card-table">
                         <div class="content">
                             <table class="table is-fullwidth is-striped">
                                 <tbody>
                                     <tr v-for="(user,index) in usersList" 
-                                        :key="index" >
-                                        <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                        <td>Nom: <strong>{{ user.lastname }}</strong> , Prénom: <strong>{{ user.firstname}}</strong></td>
-                                        <td class="level-right">
-                                            <router-link :to="{ name: 'userLog', params: { id: user.id }}">
-                                                <a class="button is-small is-primary">Profil</a>
-                                            </router-link> 
-                                        </td>                                            
+                                        :key="index" class="tr_container">
+                                        <div class="user_container">
+                                            <td width="5%"><i class="far fa-user"></i></td>
+                                            <td>Nom: <strong>{{ user.lastname }}</strong> , Prénom: <strong>{{ user.firstname}}</strong>, Privilèges: <strong>{{ user.privileges }}</strong></td>
+                                            <td class="level-right">
+                                                <router-link :to="{ name: 'userLog', params: { id: user.id }}">
+                                                    <a class="button is-small is-info">Profil</a>
+                                                </router-link> 
+                                            </td>
+                                        </div>                                        
                                     </tr>
                                 </tbody>
                             </table>
@@ -67,5 +64,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+    .tr_container{
+        & .user_container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #dbdbdb;
+            border-width: 0 0 1px;
+            & td{
+                border: none;
+               border-width: none;
+            }
+            & .button.is-small.is-info{
+                border-radius: 10px;
+                min-width: 100px;
+            }
+        }
+    }
 </style>

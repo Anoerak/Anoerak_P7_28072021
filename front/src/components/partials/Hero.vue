@@ -28,17 +28,15 @@
     background-size: cover;
     background-position: bottom;
     background-repeat: no-repeat;
-    height: 400px;
+    height: 300px;
     &-body {
       padding: 1rem 3rem;
       & .title {
         text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
         padding: 20px 0 20px 0;
-        font-size: 60px;
       }
       & .subtitle {
         text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
-        font-size: 30px;
       }
     }
   }

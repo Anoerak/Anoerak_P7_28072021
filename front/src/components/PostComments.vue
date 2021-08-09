@@ -2,7 +2,7 @@
     <div v-if="isEven(index)" class="vif_pos" >
         <article id="message" class="message is-info">
                 <div class="message-header">
-                    <button class="delete button is-danger" v-if="privilegesS === 'admin'" @click.prevent="deleteComment">
+                    <button id="delete_button" class="delete button is-danger" v-if="privilegesS === 'admin'" @click.prevent="deleteComment">
                         <i class="far fa-trash-alt"></i>
                     </button>
                     <div class="header_container">
@@ -62,7 +62,7 @@ import moment from 'moment';
 import axios from 'axios';
 
 export default {
-    props: ['message', 'date', 'author', 'division', 'profilPicture', 'index', "privileges", 'commentId'], 
+    props: ['message', 'date', 'author', 'division', 'profilPicture', 'index', "privileges", 'commentId', 'postId'], 
     created: function () {
       this.moment = moment;
     },
@@ -81,16 +81,18 @@ export default {
         },
         deleteComment() {
             let data = {
+            postId: this.$store.state.postId,
             commentId: this.commentId,
             userId: this.$store.state.userId,
             privileges: this.$store.state.privilegesS
             }
-            console.log(this.commentId)
+            // console.log(this.$store.state.postId)
+            // console.log(this.commentId)
             axios.put('http://localhost:3000/admin/deleteComment/' + this.commentId, data,{ headers: {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 this.feedbackMessage = response.data.message;
                 this.isAlert = false;
                 setTimeout(() => {
@@ -103,12 +105,9 @@ export default {
                 this.isAlert = true;
                 setTimeout(() => {
                     this.$router.go()  
-                }, 2000);
+                }, 3000);
                 })
         },
-        getCommentId(){
-            console.log(this.commentId)
-        }
     },
     computed: {
     ...mapState([
@@ -140,8 +139,17 @@ export default {
                 & button.delete.button.is-danger{
                     border-radius: 100vw;
                     position: absolute;
+                    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+                    transition: transform .2s;
                     right: -5px;
                     top: -5px;
+                    &:hover{
+                        transform: scale(1.5) rotate(135deg);
+                    }
+                    &:active{
+                        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+                        background-color: rgb(248, 110, 110);
+                    }
                 }
                 & .header_container{
                     display: flex;

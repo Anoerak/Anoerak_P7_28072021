@@ -7,7 +7,6 @@
                         <input class="input" type="text" placeholder="Titre de votre Post" v-model="titleToPost">
                     </div>
             </div>
-
             <div class="field">
                 <label class="label">Catégorie</label>
                 <div class="control">
@@ -25,12 +24,12 @@
                     </div>
                 </div>
             </div>
-            <form class="profile_picture" action="">
+            <form class="gif_upload" action="">
             <div :class="{'notification is-success is-light': !isAlert, 'notification is-danger is-light': isAlert}" v-if="feedbackMessage != ''"> {{ feedbackMessage }} </div>
-                <figure class="avatar">
+                <figure class="your_gif">
                     <img :src="this.img.url" v-if="this.imgIsChecked" class="previewImg" alt="Preview post">
                 </figure>
-                <div id="user_profilPicture" class="file is-info has-name">
+                <div id="gif_uploader" class="file is-info has-name">
                     <label class="file-label">
                         <input class="file-input" type="file" ref="file" name="file" accept="image/*" @change="checkImage()" >
                         <span class="file-cta">
@@ -39,28 +38,26 @@
                             Votre GIF...
                         </span>
                         </span>
-                        <span class="file-name">
+                        <span class="file-name" :style="{'min-width':'100px'}">
                             {{img.url}}
                         </span>
                     </label>
                 </div>
             </form>
             <br>
-
             <div class="field">
                 <label class="label">Message</label>
                 <div class="control">
                     <input class="textarea" placeholder="Votre message" v-model="messageToPost">
                 </div>
             </div>
-
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button is-link" @click.prevent="postMessage">Valider</button>
+                    <button class="button is-primary" @click.prevent="postMessage">Valider</button>
                 </div>
                 <div class="control">
                         <router-link :to="'/PostsList'">
-                            <button class="button is-text">Annuler</button>
+                            <button class="button is-danger is-light">Annuler</button>
                         </router-link>
                 </div>
             </div>
@@ -71,7 +68,6 @@
 <script>
 import axios from 'axios'
 import { mapState } from 'vuex'
-
 
 export default {
   data() {
@@ -99,7 +95,7 @@ export default {
             let title = this.titleToPost;
             let category = this.categoryToPost;
             let message = this.messageToPost;
-            let syntaxeMessageAllowed = /^[a-zA-Z0-9 _.,!:?€çÇ'’(Ééèàû)&]{2,250}$/;  
+            let syntaxeMessageAllowed = /[a-zA-Z0-9 _@ê'ôûù(-èéÉÈÀÊÙ!çà)€^%ù:.;?,+=]{2,250}$/;  
             if(syntaxeMessageAllowed.test(message)) {
                 const formData = new FormData();
                 formData.append ("authorId", this.$store.state.userId)

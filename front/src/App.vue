@@ -21,32 +21,32 @@ export default {
     Hero
   },
   
-    beforeCreate() {
-    this.$store.state.tokenToCheck = this.$localStorage.get('token');
-    this.$store.state.userId = this.$localStorage.get('userId');
-    this.$store.commit('CHECK_TOKEN');
-  },
-    created() {
-    this.$store.state.tokenToCheck = this.$localStorage.get('token');
-    this.$store.state.userId = this.$localStorage.get('userId');
-    this.$store.dispatch('getInfos');
-  },
+  // beforeCreate() {
+  //   this.$store.state.tokenToCheck = this.$localStorage.get('token');
+  //   this.$store.state.userId = this.$localStorage.get('userId');
+  //   this.$store.commit('CHECK_TOKEN');
+  // },
+  // created() {
+  //   this.$store.state.tokenToCheck = this.$localStorage.get('token');
+  //   this.$store.state.userId = this.$localStorage.get('userId');
+  //   this.$store.dispatch('getInfos');
+  // },
   beforeMount() {
     this.$store.state.tokenToCheck = this.$localStorage.get('token');
     this.$store.state.userId = this.$localStorage.get('userId');
     this.$store.dispatch('getInfos');
     this.$store.commit('CHECK_TOKEN');
   },
-  beforeUpdate() {
-    this.$store.state.tokenToCheck = this.$localStorage.get('token');
-    this.$store.state.userId = this.$localStorage.get('userId');
-    this.$store.commit('CHECK_TOKEN');
-  },
-  updated() {
-    this.$store.state.tokenToCheck = this.$localStorage.get('token');
-    this.$store.state.userId = this.$localStorage.get('userId');
-    this.$store.dispatch('getInfos');
-  }
+  // beforeUpdate() {
+  //   this.$store.state.tokenToCheck = this.$localStorage.get('token');
+  //   this.$store.state.userId = this.$localStorage.get('userId');
+  //   this.$store.commit('CHECK_TOKEN');
+  // },
+  // updated() {
+  //   this.$store.state.tokenToCheck = this.$localStorage.get('token');
+  //   this.$store.state.userId = this.$localStorage.get('userId');
+  //   this.$store.dispatch('getInfos');
+  // }
 }
 </script>
 

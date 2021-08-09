@@ -74,7 +74,6 @@ export default createRouter({
           path:'/admin/register',
           component: Register
         }
-
       ]
     },
       {

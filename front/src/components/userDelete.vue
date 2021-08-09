@@ -51,7 +51,7 @@
                     <div class="deleteMessage" v-if="displayDeleteMessage">
                         <h3>Etes vous certain de vouloir supprimer votre compte ?</h3><br>
                         <div>
-                            <button class="button is-danger" @click.prevent="deleteAccount"> Supprimer definitivement votre compte </button>
+                            <button class="button is-danger" @click.prevent="deleteAccount"> Supprimer definitivement ? </button>
                             <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="feedbackDeleteAccount != ''"> {{ feedbackDeleteAccount }} </div>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
     <div class="hero is-primary">
       <div class="hero-body">
         <div class="container">
-          <h1 class="title is-size-1">À Propos de la communauté Groupomania</h1>          
+          <p class="title is-size-3">À Propos de la communauté Groupomania</p>          
         </div>
       </div>
     </div>
@@ -16,12 +16,20 @@
 
 
 <style lang="scss" scoped>
-.hero{
-  &.is-primary{
+.about{
+  & .hero.is-primary{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #182a48;
+    height: 100px;
+  }
+  & .container{
+    margin: 1rem;
+    & .comp-description {
+      margin-top: 50px;
+    }
   }
 }
-  .comp-description {
-    margin-top: 50px;
-  }
+
 </style>

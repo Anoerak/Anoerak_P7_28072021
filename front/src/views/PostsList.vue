@@ -1,11 +1,19 @@
 <template>
   <div class="posts container" v-if="isLogged">
-    <router-link :to="'/Create/'">
-    <button class="button is-info  is-pulled-right">Ajouter votre Post</button>
-    </router-link>
     <h2 class="subtitle is-3">
     Consulter les dernières publications de vos collègues.
     </h2><br>
+    <div class="orderBy">
+      <div class="filter">
+        <button class="button is-light is-info" :style="{'margin':'0.5rem'}" @click.prevent="displayAllPosts" >Tri par Date</button>
+        <button class="button is-light is-info" :style="{'margin':'0.5rem'}" @click.prevent="displayByPopularity" >Tri par Popularité</button>
+      </div>
+        <router-link :to="'/Create/'">
+          <button class="button is-link is-pulled-right">Ajouter votre Post</button>
+        </router-link>
+    </div>    
+    <br>
+    <br>
     <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="feedbackMessage != ''">{{ feedbackMessage }}</div>
     <div class="columns is-multiline">
     <PostCard @postFlagged="displayAllPosts()" 
@@ -59,6 +67,20 @@ export default {
   methods: {
     displayAllPosts(){
         axios.get('http://localhost:3000/postsList/getAll/',
+          { headers: {
+            'Authorization': `token ${this.$store.state.tokenToCheck}`
+            }}
+            )
+        .then(response => {
+          console.log(response)
+            this.posts = response.data.resultat; 
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    },
+    displayByPopularity(){
+        axios.get('http://localhost:3000/postsList/getAllByPopularity/',
           { headers: {
             'Authorization': `token ${this.$store.state.tokenToCheck}`
             }}
@@ -143,9 +165,13 @@ export default {
   .posts {
     margin-top: 100px;
     text-align: center;
+    & .orderBy{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
     & .button{
-      background-color: rgba(0, 0, 0, 0.2);
-      color: black;
+      border-radius: 10px;
     }
   }
 </style>

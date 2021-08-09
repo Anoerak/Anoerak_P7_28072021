@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <div class="container">
+    <div class="container"><br><br>
       <div class="cartouche">
           <div class="left">
           <img :src="profile.profilPicture" width="96" height="96" alt="" style="border-radius:100%">

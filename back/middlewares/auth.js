@@ -5,10 +5,10 @@ module.exports = (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN');
         const userId = decodedToken.userId; 
-        console.log(userId);
-        console.log(req.body.userId);
+        // console.log(userId);
+        // console.log(req.body.userId);
         if(req.body.userId && req.body.userId != userId ){
-            throw 'UserID inconnu'; 
+            throw 'UserId inconnu'; 
         }
         else {
             if(req.method == "GET") {

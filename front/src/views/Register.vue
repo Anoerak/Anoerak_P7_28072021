@@ -103,21 +103,6 @@
     </section>
 </template>
 
-<style lang="scss" scoped>
-    .hero2{
-        background-image: none;
-        background-color: #FFF;
-        & .box{
-            border-radius: 10px;
-            & .avatar{
-                & img{
-                    max-width: 5rem;
-                }
-            }
-        }
-    }
-</style>
-
 <script>
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
@@ -245,3 +230,19 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+    .hero2{
+        background-image: none;
+        background-color: #FFF;
+        & .box{
+            border-radius: 10px;
+            & .avatar{
+                & img{
+                    max-width: 5rem;
+                }
+            }
+        }
+    }
+</style>

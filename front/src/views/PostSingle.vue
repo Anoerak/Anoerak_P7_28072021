@@ -138,9 +138,9 @@ export default {
                     }
                 })
         .then(response => {
-            console.log(response)
+            // console.log(response)
             this.comments = response.data.resultat;
-            console.log(this.comments)
+            // console.log(this.comments)
         })
         .catch(error => {
             console.log(error);
@@ -175,7 +175,7 @@ export default {
         let data = {
             idToFlag: this.postId, 
             userId: this.$store.state.userId,
-            roleUser: this.$store.state.privilegesS,            
+            privileges: this.$store.state.privilegesS,            
             isFlagged: this.postFlagStatus
           }
         console.log(data);
@@ -225,33 +225,6 @@ export default {
             }, 2000);
             })
     },
-    deleteComment() {
-        let data = {
-          commentId: this.postId,
-          userId: this.$store.state.userId,
-          privileges: this.$store.state.privilegesS
-          }
-        console.log(this.postId)
-        axios.put('http://localhost:3000/admin/deleteComment/' + this.postId, data,{ headers: {
-            'Authorization': `token ${this.$store.state.tokenToCheck}`
-            }})
-        .then((response) => {
-            console.log(response)
-            this.feedbackMessage = response.data.message;
-            this.isAlert = false;
-            setTimeout(() => {
-                this.$router.push('/admin')  
-            }, 2000);
-            })
-        .catch(error => {
-            console.log(error)
-            this.feedbackMessage = error.response.data.message;
-            this.isAlert = true;
-            setTimeout(() => {
-                this.$router.go()  
-            }, 2000);
-            })
-    },
   },
   mounted() {
     const route = useRoute();
@@ -280,7 +253,7 @@ export default {
 
 <style lang="scss" scoped>
   .hero-body{
-    background-color: rgba(0, 0, 255, 0.562);
+    background-color: rgba(0, 0, 112, 0.623);
   }
   .subtitle, .title {
     text-align: center;
@@ -299,6 +272,8 @@ export default {
     align-items: center;
     & .button.is-danger.is-light, .button.is-danger.is-danger, .button.is-primary.is-light{
       margin-right: 0px;
+      margin-left: 1rem;
+      border-radius: 10px;
     }
   }
 </style>
