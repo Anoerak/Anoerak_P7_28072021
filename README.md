@@ -2,7 +2,7 @@
 
 Projet OpenClassroom N°7 "GROUPOMANIA"
 
-Installation
+#Installation
 
 Cloner le projet dans un dossier afin d'obtenir une arborescence "front" et "back" au sein du même dossier parent.
 Importez la base donnée groupomaniadb.sql sur votre système MySQL.
@@ -13,14 +13,14 @@ Lancez le terminal, dirigez-vous vers le dossier back. Executez la commande npm 
 Lancez le terminal, dirigez-vous vers le dossier front. Executez la commande npm install puis npm run serve.
 Stack
 
-Bulma
-axios
-yup
-Node.js.
-Vue.js. + vuex + vuelidate + vue-ls + vue-moment + vue-router + vue-storage-watcher.
-MySQL.
-phpMyAdmin.
-Utilisation
+*Bulma
+*axios
+*yup
+*Node.js.
+*Vue.js. + vuex + vuelidate + vue-ls + vue-moment + vue-router + vue-storage-watcher.
+*MySQL.
+*phpMyAdmin.
+*Utilisation
 
 Pour vous inscrire, il vous faut renseigner :
 
