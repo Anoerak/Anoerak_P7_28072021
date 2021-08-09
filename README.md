@@ -2,7 +2,7 @@
 
 Projet OpenClassroom N°7 "GROUPOMANIA"
 
-# Installation
+## Installation
 
 Cloner le projet dans un dossier afin d'obtenir une arborescence "front" et "back" au sein du même dossier parent.
 Importez la base donnée groupomaniadb.sql (dans le dossier Database de ce repo) sur votre système MySQL.
@@ -24,7 +24,7 @@ Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande
 *phpMyAdmin.
 *Utilisation
 
-#### Pour vous inscrire, il vous faut renseigner :
+### Pour vous inscrire, il vous faut renseigner :
 
 Un pseudo (2 caractères minimum avec lettres, tiret et espaces uniquement)
 Une adresse mail valide
