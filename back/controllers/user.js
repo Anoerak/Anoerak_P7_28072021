@@ -123,3 +123,17 @@ exports.getAllUsers = (req, res, next) => {
         return res.status(200).json(resultat);
     })
 };
+
+exports.flagPost = (req,res,next) => {
+    if(req.body.isFlagged == 0) {
+        bdd.query('UPDATE posts SET isFlagged="1" WHERE id="'+req.body.idToFlag+'"', (err, result) => {
+            if(err) {
+                return res.status(500).json({message: 'Erreur dans le traitement de votre demande'});
+            }
+            return res.status(200).json({ message: "Ce post vient d'être signalé à l'administateur"});
+        }
+    )
+    }else{
+        return res.status(500).json({message: "Ce post à déjà fait l'objet d'un signalement"});
+    }
+}

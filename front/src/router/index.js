@@ -8,11 +8,12 @@ import PostSingle from '../views/PostSingle.vue'
 import PostCreate from '../views/PostCreate.vue'
 import UserAccount from '../views/UserAccount.vue'
 import UserLog from '../views/UserLog.vue'
-import PostComment from '../components/PostComments.vue'
+import PostComments from '../components/PostComments.vue'
 
 import Admin from '../views/Admin'
 import AdminUsersList from '../components/usersList.vue'
 import AdminUsersListDelete from '../components/usersListDelete.vue'
+import AdminUserDelete from '../components/userDelete.vue'
 import AdminFlaggedPosts from '../components/flaggedPosts'
 
 
@@ -64,7 +65,16 @@ export default createRouter({
         {
           path:'/admin/usersListDelete',
           component: AdminUsersListDelete
+        },
+        {
+          path:'/admin/userDelete/:id',
+          component: AdminUserDelete
+        },
+        {
+          path:'/admin/register',
+          component: Register
         }
+
       ]
     },
       {
@@ -85,7 +95,7 @@ export default createRouter({
     {
       path: '/post/:id/comment',
       name: 'postComments',
-      component: PostComment
+      component: PostComments
     }
   ]
 })

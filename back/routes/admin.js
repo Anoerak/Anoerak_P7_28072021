@@ -10,7 +10,9 @@ router.get('/users/', auth, admin, adminControllers.getStatsUsers);
 router.get('/posts/', auth, admin, adminControllers.getStatsPosts);
 router.get('/comments/', auth, admin, adminControllers.getStatsComments);
 router.get('/flagged/', auth, admin, adminControllers.getStatsFlagged);
-router.put('/flagPost/:id', auth, admin, adminControllers.flagPost);
+router.put('/flagPost/:id', auth, admin, adminControllers.unflagPost);
 router.put('/deleteUser/:id',auth, admin, adminControllers.deleteAccount);
+router.put('/deletePost/:id', auth, admin, adminControllers.deletePost);
+router.put('/deleteComment/:id',auth, admin, adminControllers.deleteComment);
 
 module.exports = router;

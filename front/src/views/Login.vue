@@ -40,7 +40,7 @@
                                 </label>
                             </div>
                             <button class="button is-block is-info is-large is-fullwidth" :disabled="v$.$invalid" @click.prevent="login">Connexion <i class="fa fa-sign-in" aria-hidden="true"></i></button> <br>
-                            <button class="button is-block is-primary is-normal is-fullwidth"  @click="$router.push('/Register')">S'enregistrer <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            <button class="button is-block is-primary is-normal is-fullwidth"  @click="$router.push('/Register')">S'enregistrer</button>
                         </form>
                     </div>
                     <p class="has-text-grey">

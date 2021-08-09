@@ -57,7 +57,7 @@ exports.postComment = (req,res, next) => {
 };
 
 exports.getAllPosts = (req, res, next) => {
-    bdd.query('SELECT * FROM posts WHERE isFlagged="0" ORDER BY date DESC', (err, resultat) => {
+    bdd.query('SELECT * FROM posts ORDER BY date DESC', (err, resultat) => {
         if(err) throw (err);
         return res.status(200).json({ resultat });
     })

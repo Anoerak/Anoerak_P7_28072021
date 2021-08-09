@@ -5,35 +5,26 @@
                 <div class="card events-card">
                     <header class="card-header">
                         <p class="card-header-title">
-                            Listes Utilisateurs
+                            <strong>Listes Utilisateurs</strong>
                         </p>
-                        <a href="#" class="card-header-icon" aria-label="more options">
-                            <span class="icon">
-                                <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </a>
                     </header>
                     <div class="card-table">
                         <div class="content">
                             <table class="table is-fullwidth is-striped">
                                 <tbody>
                                     <tr class="tr_container" v-for="(user,index) in usersList" 
-                                        :key="index" >
+                                        :key="index"
+                                        :id="user.id"
+                                        :profilPicture="user.profilPicture"
+                                        :username='user.username'
+                                        :firstname="user.firstname"
+                                        :lastname="user.lastname"
+                                        :division="user.division" >
                                         <div class="user_container">
                                             <td>Nom: <strong>{{ user.lastname }}</strong> , Prénom: <strong>{{ user.firstname}}</strong></td>
                                             <td class="level-right">                                            
-                                            <button class="button is-small is-danger is-light" @click.prevent="displayDeleteMessage = !displayDeleteMessage">Supprimer le compte</button>                                            
+                                            <router-link :to="'/admin/userDelete/' + user.id "><button class="button is-small is-danger is-light" >Supprimer le compte</button></router-link>                                            
                                             </td>
-                                        </div>
-                                        <div class="deleteMessage" v-if="displayDeleteMessage"><br>
-                                            <h5>Etes vous certain de vouloir supprimer ce compte ?</h5><br>
-                                            <div>
-                                                <label for="passwordDeleteAccount">Saisissez le code suivant : {{ user.id }}</label><br>
-                                                <input class="input is-normal" :class="{invalid: v$.confirmationId.$error}" type="password" placeholder="Code de confirmation" v-model="confirmationId"><br><br>
-                                                <button class="button is-danger" @click.prevent="deleteAccount"> Supprimer definitivement le compte de {{user.lastname}} {{user.firstname}} ? </button>
-                                                <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="feedbackDeleteAccount != ''"> {{ feedbackDeleteAccount }} </div>
-                                            </div>
-                                            <br><br>
                                         </div>
                                     </tr>
                                 </tbody>
@@ -48,22 +39,12 @@
 
 <script>
 import axios from 'axios'
-import useVuelidate from '@vuelidate/core'
-import { required, sameAs } from '@vuelidate/validators'
 
 
 export default {
-    setup () {
-        return { v$: useVuelidate () }
-    },
-
     data() {
         return {
             usersList: [],
-            feedbackDeleteAccount: '',
-            passwordDeleteAccount: '',
-            confirmationId:'',
-            displayDeleteMessage:false
         }
     }, 
     methods: {
@@ -72,8 +53,9 @@ export default {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
             .then(response => {
-                // console.log(response)
+                console.log(response)
                 this.usersList = response.data;
+                this.userId = response.data[0].id
             })
             .catch(error => {
                 console.log(error);
@@ -100,15 +82,7 @@ export default {
                 this.feedbackDeleteAccount = error.response.data.message;
                 this.isAlertDelete = true;
                 })
-        }        
-    }, 
-    validations () {
-        return {
-            confirmationId: {
-            required,
-            sameAsPassword: sameAs(this.confirmationId)
-            }
-        }
+        },
     },    
     mounted() {
         this.getUserList();

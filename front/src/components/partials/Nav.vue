@@ -8,14 +8,14 @@
           <strong class="is-size-4">Groupomania</strong>
         </router-link>
       </a>
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" v-on:click="showNav = !showNav" v-bind:class="{ 'is-active' : showNav }">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
     </div>
 
-    <div id="navbar" class="navbar-menu">
+    <div id='nav-menu' class="navbar-menu" v-bind:class="{ 'is-active' : showNav }">
       <div class="navbar-start">
         <a class="navbar-item">
           <router-link to="/postsList" class="navbar-item" v-if="isLogged == true">Acceuil</router-link>
@@ -44,6 +44,12 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'Nav',
+  el:'#app',
+  data() {
+    return {
+      showNav: false
+    }
+  },
   computed: {
     loggedIn() {
       return this.$store.getters.isLogged; 

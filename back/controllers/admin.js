@@ -42,29 +42,36 @@ exports.getStatsFlagged = (req, res, err) => {
 }
 
 exports.deleteAccount = (req,res,next) => {
-    bdd.query('SELECT password, profilPicture FROM users WHERE id="'+ req.body.userId +'"', (err, resultat) => {
-        if(err) throw err; 
-        then(valid => {
-            if(!valid){
-                if(!valid) return res.status(500).json({ message: "Mot de passe non valide"});
-            }
-            let profilPictureToDelete = resultat[0].profilPicture.split('/profils/')[1]
-            fs.unlink(`images/profils/${profilPictureToDelete}`, () => { 
-                bdd.query('DELETE FROM users WHERE id="'+ req.body.userId +'"',(err, result) => {
-                    if(err) throw err;
-                    bdd.query('DELETE FROM posts WHERE authorId="'+ req.body.userId +'"',(err, result) => { 
-                        if(err) throw err;
-                        bdd.query('DELETE FROM comments WHERE idAuteur="'+ req.body.userId +'"',(err, result) => { 
-                            if(err) throw err;
-                            return res.status(200).json({ message: 'Compte supprimé, redirection en cours.'});
-                        })
-                    })
-                })
+    bdd.query('DELETE FROM users WHERE id="'+ req.body.accountId +'"',(err, result) => { 
+        if(err) throw (err);
+        bdd.query('DELETE FROM posts WHERE authorId="'+ req.body.accountId +'"',(err, result) => { 
+            if(err) throw (err);
+            bdd.query('DELETE FROM comments WHERE authorId="'+ req.body.accountId +'"',(err, result) => { 
+                if(err) throw (err);
+                    return res.status(200).json({ message: "Ce compte ainsi que tous les posts et commentaire(s) liés à ce dernier viennent d'être supprimés"});
             })
-
+        })    
+    })
+};
+exports.deletePost = (req,res,next) => {
+    bdd.query('DELETE FROM posts WHERE id="'+ req.body.postId +'"',(err, result) => { 
+        if(err) throw (err);
+        bdd.query('DELETE FROM comments WHERE postId="'+ req.body.postId +'"',(err, result) => { 
+            if(err) throw (err);
+                return res.status(200).json({ message: "Le post ainsi que le(s) commentaire(s) inhérent à ce dernier viennent d'être supprimé"});
         })
     })
 };
+exports.deleteComment = (req,res,next) => {
+    bdd.query('DELETE FROM comments WHERE id="'+ req.body.commentId +'"',(err, result) => { 
+        if(err) {
+            return res.status(500).json({ message: 'Erreur lors du traitement de votre requête'})
+        };
+            return res.status(200).json({ message: "Le commentaire vient d'être supprimé"});
+        }
+    )
+};
+
 
 exports.getFlaggedPosts = (req, res, next) => {
 
@@ -74,30 +81,18 @@ exports.getFlaggedPosts = (req, res, next) => {
     })
 };
 
-exports.flagPost = (req,res,next) => {
-
-        bdd.query('SELECT role FROM users WHERE id="'+req.body.userId+'"', (err, result) => { // Vérification des accès de celui qui fait la requête
-            if(err) {
-                return res.status(500).json({message: 'Erreur lors du traitement de la requête'});
-            }
-            if(result[0].role == "admin" && req.body.roleUser == "admin") {
-                if(req.body.isFlagged == 0) {
-                bdd.query('UPDATE posts SET isFlagged="1" WHERE id="'+req.body.idToFlag+'"', (err, result) => {
-                    if(err) {
-                        return res.status(500).json({message: 'Erreur lors du traitement de la requête'});
-                    }
-                    return res.status(200).json({ message: 'Le poste a bien été mis en quarantaine'});
-                })
-                } else {
-                    bdd.query('UPDATE posts SET isFlagged="0" WHERE id="'+req.body.idToFlag+'"', (err, result) => {
-                        if(err) {
-                            return res.status(500).json({message: 'Erreur lors du traitement de la requête'});
-                        }
-                        return res.status(200).json({ message: "Le poste a été remis dans le fil d'actualité"});
-                    })
+exports.unflagPost = (req,res,next) => {
+    bdd.query('SELECT privileges FROM users WHERE id="'+req.body.userId+'"', (err, result) => {
+        if(err) {
+            return res.status(500).json({message: 'Erreur lors du traitement de la requête'});
+        }
+        if(result[0].privileges == "admin" && req.body.roleUser == "admin") {
+            bdd.query('UPDATE posts SET isFlagged="0" WHERE id="'+req.body.idToFlag+'"', (err, result) => {
+                if(err) {
+                    return res.status(500).json({message: 'Erreur lors du traitement de votre requête'});
                 }
-            }
-        })
-};
-
-
+                return res.status(200).json({ message: "Le signalement vient d'être retiré."});
+            })
+        }
+    })
+}

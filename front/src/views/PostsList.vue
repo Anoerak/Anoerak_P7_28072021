@@ -24,10 +24,6 @@
         :index="postIndex"
         :isFlagged="post.isFlagged"
         class="column is-one-quarter" />
-        <!-- <router-link
-          :to="'/post/' + id" >
-          <PostCard :post="post" />
-        </router-link> -->
     </div>
   </div>
 </template>
@@ -68,7 +64,7 @@ export default {
             }}
             )
         .then(response => {
-          // console.log(response)
+          console.log(response)
             this.posts = response.data.resultat; 
         })
         .catch(error => {

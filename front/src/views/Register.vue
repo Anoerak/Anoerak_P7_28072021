@@ -1,5 +1,5 @@
 <template>
-    <section class="hero2 is-success is-fullheight" v-if="!loggedIn">
+    <section class="hero2 is-success is-fullheight" v-if="!loggedIn | privilegesS === 'admin'">
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div class="column is-6 is-offset-3">
@@ -122,6 +122,7 @@
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export function validName(name) {
   let validNamePattern = new RegExp("^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$");
@@ -235,6 +236,12 @@ export default {
           this.isAlert = true;  
           });
     }
+  },
+  computed: {
+    ...mapState([
+      'privilegesS',
+      'loggedIn'
+    ])
   }
 }
 </script>
