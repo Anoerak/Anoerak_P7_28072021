@@ -11,7 +11,8 @@ Paramétrez les accès à votre Base de donnée MYSQL grâce au fichier back/mys
 ## Démarrage
 
 Lancez le terminal, dirigez-vous vers le dossier ``back``. Executez la commande ``npm install`` puis nodemon.  
-Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande ``npm install`` puis npm run serve.
+Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande ``npm install`` puis npm run serve.  
+Si votre navigateur se s'ouvre pas automatiquement, lancer une page web et rendez-vous à l'adresse `http://localhost:8080`.  
 
 ### Stack
 
