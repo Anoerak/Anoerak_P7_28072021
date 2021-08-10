@@ -47,4 +47,5 @@ Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande
 Un pseudo (2 caractères minimum avec lettres, tiret et espaces uniquement),  
 Une adresse mail valide,  
 Un mot de passe (6 caractères minimum avec au moins 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial).  
-Vous pouvez par la suite modifier ce dernier en allant sur votre profil. Votre compte peut être supprimé par vous-même ainsi que par l'administrateur.
+Vous pouvez par la suite modifier ce dernier en allant sur votre profil.  
+Votre compte peut être supprimé par vous-même ainsi que par l'administrateur.
