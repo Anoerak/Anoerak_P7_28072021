@@ -44,6 +44,8 @@ Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande
 
 ### Pour vous inscrire, il vous faut renseigner :
 
+Votre nom et prénom,  
+Votre service (liste à choix),  
 Un pseudo (2 caractères minimum avec lettres, tiret et espaces uniquement),  
 Une adresse mail valide,  
 Un mot de passe (6 caractères minimum avec au moins 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial).  
