@@ -26,20 +26,20 @@ Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande
     *"mysql": "^2.18.1",
 
 => front
-    *"@vuelidate/core": "^2.0.0-alpha.22",
-    *"@vuelidate/validators": "^2.0.0-alpha.19",
-    *"axios": "^0.21.1",
-    *"bulma": "^0.9.3",
-    *"core-js": "^3.6.5",
-    *"jsonwebtoken": "^8.5.1",
-    *"nodemon": "^2.0.12",
-    *"vue": "^3.0.0",
-    *"vue-ls": "^3.2.2",
-    *"vue-moment": "^4.1.0",
-    *"vue-router": "^4.0.0-0",
-    *"vue-storage-watcher": "^1.3.3",
-    *"vuex": "^4.0.0-0",
-    *"yup": "^0.32.9"
+    * [@vuelidate/core]: "^2.0.0-alpha.22",
+    * [@vuelidate/validators]: "^2.0.0-alpha.19",
+    * [axios]: "^0.21.1",
+    * [bulma]: "^0.9.3",
+    * [core-js]: "^3.6.5",
+    * [jsonwebtoken]: "^8.5.1",
+    * [nodemon]: "^2.0.12",
+    * [vue]: "^3.0.0",
+    * [vue-ls]: "^3.2.2",
+    * [vue-moment]: "^4.1.0",
+    * [vue-router]: "^4.0.0-0",
+    * [vue-storage-watcher]: "^1.3.3",
+    * [vuex]: "^4.0.0-0",
+    * [yup]: "^0.32.9"
 
 
 ### Pour vous inscrire, il vous faut renseigner :
