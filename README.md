@@ -15,7 +15,7 @@ Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande
 
 ### Stack
 
-=> back
+=> back  
     * [bcrypt]: "^5.0.1".  
     * [cors]: "^2.8.5".  
     * [crypto]: "^1.0.1".  
@@ -25,7 +25,7 @@ Lancez le terminal, dirigez-vous vers le dossier ``front``. Executez la commande
     * [jws]: "^4.0.0".  
     * [mysql]: "^2.18.1".  
 
-=> front
+=> front  
     * [@vuelidate/core]: "^2.0.0-alpha.22".  
     * [@vuelidate/validators]: "^2.0.0-alpha.19".  
     * [axios]: "^0.21.1".  
