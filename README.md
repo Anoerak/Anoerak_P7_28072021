@@ -55,5 +55,5 @@ Votre compte peut être supprimé par vous-même ainsi que par l'administrateur.
 
 ### Pour vous connecter en profil "admin" :
 
-pseudo: dom
-password: @Zert1
+pseudo: dom  
+password: @Zert1  
