@@ -1,6 +1,3 @@
-<style scoped>
-
-</style>
 <template>
     <div id="admin_dashboard">
         <div v-if="privilegesS = 'admin'">

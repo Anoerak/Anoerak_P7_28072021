@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <div class="container"><br><br>
+        <div :class="{'notification is-danger is-light': isAlert, 'notification is-success is-light': !isAlert}" v-if="errorMessage != ''">{{ errorMessage }}</div>
       <div class="cartouche">
           <div class="left">
           <img :src="profile.profilPicture" width="96" height="96" alt="" style="border-radius:100%">
@@ -9,10 +10,21 @@
           <div class="middle">
             <h3>Nom : {{ profile.lastname }}</h3>
             <h4>Prénom : {{ profile.firstname }}</h4>
+            <h4>Service : {{ profile.division }}</h4>
           </div>
           <div class="right">
-            <h3>Service : {{ profile.division }}</h3>
-            <h4>Droits Utilisateurs : {{ profile.privileges }}</h4>
+            <h4>Accès : {{ profile.privileges }}</h4>
+            <form>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" id="userAcces" type="text" placeholder="'admin' ou 'user'" autofocus="" v-model="v$.userAccess.$model" />
+                          <div class="input-errors" v-for="(error, index) of v$.userAccess.$errors" :key="index">
+                            <div class="help is-danger">{{ error.$message }}</div>
+                          </div>
+                    </div>
+                </div>
+                    <button class="button is-block is-success" :disabled="v$.$invalid" @click.prevent="modifyPrivileges">Modifier les droits</button>        
+              </form>
           </div>
       </div>
       <h2> Liste des publications </h2>
@@ -36,20 +48,37 @@
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import axios from 'axios'
 import Post from '../components/PostCard.vue'
 
+export function validPrivileges(name) {
+  let validNamePattern = new RegExp("^(admin|user)*$");
+  if (validNamePattern.test(name)){
+    return true;
+  }
+  return false;
+}
+
 export default {
+    setup () {
+    return { v$: useVuelidate () }
+  },
   data() {
     return {
+      errorMessage:'',
+      userAccess: '',
+      isAlert: false,
       posts: [],
       profile: {
+        userIdCode:'',
         lastname:'',
         firstname:'',
         username: '',
         division:'',
-        pirvileges:'', 
-        profilPicture: ''
+        privileges:'', 
+        profilPicture: '',
       }
     }
   },
@@ -85,6 +114,8 @@ export default {
                 'Authorization': `token ${this.$store.state.tokenToCheck}`
                 }})
             .then(response => {
+              // console.log(response.data[0].id)
+                this.profile.userIdCode = response.data[0].id;
                 this.profile.lastname = response.data[0].lastname;
                 this.profile.firstname = response.data[0].firstname;
                 this.profile.username = response.data[0].username;
@@ -95,6 +126,45 @@ export default {
             .catch(error => {
                 console.log(error);
             })
+    },
+    modifyPrivileges() {
+        let userId = parseInt(this.$route.params.id, 10);
+        let data = {
+            userId: this.$store.state.userId, 
+            newPrivilegesId: parseInt(this.$route.params.id, 10),
+            privileges: this.$store.state.privilegesS,
+            newPrivileges: this.userAccess,            
+          }
+        console.log(data);
+        axios.put('http://localhost:3000/admin/modifyPrivileges/'+ userId, data , { headers: {
+            'Authorization': `token ${this.$store.state.tokenToCheck}`
+            }})
+        .then(response => {
+            this.feedbackMessage = response.data.message;
+            this.isAlert = false; 
+            setTimeout(() => {
+              this.$router.go('')  
+            }, 2000)
+        })
+        .catch(error => {
+            console.log(error.response.data.message);
+            this.feedbackMessage = error.response.data.message;
+            this.isAlert = true;
+            setTimeout(() => {
+              this.$router.go()  
+            }, 2000)
+        })
+    },
+  },
+  validations () {
+    return {
+      userAccess: {
+        required,
+          privilege_validation: {
+            $validator: validPrivileges,
+            $message: 'entrer uniquement "admin" ou "user"',
+        }
+      }
     }
   },
   mounted() {
@@ -122,6 +192,13 @@ a .card .card-content h2{
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+ .button{
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
 }
 
 </style>

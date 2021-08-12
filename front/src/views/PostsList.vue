@@ -72,7 +72,7 @@ export default {
             }}
             )
         .then(response => {
-          console.log(response)
+          // console.log(response)
             this.posts = response.data.resultat; 
         })
         .catch(error => {

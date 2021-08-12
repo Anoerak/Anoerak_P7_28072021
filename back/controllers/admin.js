@@ -97,3 +97,19 @@ exports.unflagPost = (req,res,next) => {
         }
     })
 }
+
+exports.modifyPrivileges = (req,res,next) => {
+    bdd.query('SELECT privileges FROM users WHERE id="'+req.body.userId+'"', (err, result) => {
+        if(err) {
+            return res.status(500).json({message: 'Erreur lors du traitement de la requête.'});
+        }
+        if(result[0].privileges == "admin" && req.body.privileges == "admin") {
+            bdd.query('UPDATE users SET privileges="'+req.body.newPrivileges+'" WHERE id="'+req.body.newPrivilegesId+'"', (err, result) => {
+                if(err) {
+                    return res.status(500).json({message: 'Erreur lors du traitement de votre requête.'});
+                }
+                return res.status(200).json({ message: "Le signalement vient d'être retiré."});
+            })
+        }
+    })
+}
